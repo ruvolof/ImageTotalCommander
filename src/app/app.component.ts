@@ -14,7 +14,6 @@ export class AppComponent {
     console.log('AppConfig', AppConfig);
 
     if (electronService.isElectron) {
-      console.log(process.env);
       console.log('Running in electron');
     } else {
       console.log('Running in browser');

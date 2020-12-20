@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import {GalleryComponent} from './gallery.component';
+import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
 
 const routes: Routes = [
-  {path: 'gallery', component: GalleryComponent},
+  {path: 'gallery', component: GalleryGridComponent},
 ];
 
 @NgModule({
