@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {skip, tap} from 'rxjs/operators';
+
+import {ElectronService} from '../core/services/electron/electron.service';
 
 @Component({
   selector: 'app-gallery',
@@ -6,10 +10,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./gallery.component.scss']
 })
 export class GalleryComponent implements OnInit {
+  public inputDir = '.';
+  public filesList: string[] = [];
 
-  constructor() { }
+  filesSubject = new BehaviorSubject<string[]>([]);
+
+  constructor(
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly electronService: ElectronService) { }
 
   ngOnInit(): void {
+    this.filesSubject.subscribe(files => {
+      this.filesList = files;
+      this.changeDetectorRef.detectChanges();
+    });
   }
 
+  public getFilesList(): void {
+    this.electronService.fs.readdir(this.inputDir, (error, files) => {
+      if (!error) {
+        this.filesSubject.next(files);
+      }
+      else {
+        this.filesSubject.next([]);
+      }
+    });
+  }
 }

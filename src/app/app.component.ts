@@ -1,4 +1,4 @@
-import {Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ElectronService} from './core/services';
 import {AppConfig} from '../environments/environment';
 
@@ -15,11 +15,9 @@ export class AppComponent {
 
     if (electronService.isElectron) {
       console.log(process.env);
-      console.log('Run in electron');
-      console.log('Electron ipcRenderer', this.electronService.ipcRenderer);
-      console.log('NodeJS childProcess', this.electronService.childProcess);
+      console.log('Running in electron');
     } else {
-      console.log('Run in browser');
+      console.log('Running in browser');
     }
   }
 }
