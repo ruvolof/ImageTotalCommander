@@ -1,0 +1,8 @@
+<app-gallery-slider *ngIf="selectedPictureIndex !== -1"
+                    [imageIndex]="selectedPictureIndex"
+                    [imageSrcArray]="pictureSrcArray">
+</app-gallery-slider>
+<app-gallery-grid [imageSrcArray]="pictureSrcArray"
+                  (directoryInput)="onDirectoryInput($event)"
+                  (pictureSelected)="onPictureSelected($event)">
+</app-gallery-grid>

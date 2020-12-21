@@ -1,15 +1,17 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 
-import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
+import {GalleryComponent} from './gallery.component';
 
 const routes: Routes = [
-  {path: 'gallery', component: GalleryGridComponent},
+  {path: 'gallery', component: GalleryComponent},
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
+    CommonModule,
+    RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
   ],
   exports: [RouterModule]
 })

@@ -2,13 +2,14 @@
                 appearance="fill">
   <mat-label>Directory...</mat-label>
   <input matInput
-        [(ngModel)]="inputDir"
-        (input)="getFilesList()">
+        (input)="onDirectoryInput($event.target.value)">
 </mat-form-field>
 
 <mat-grid-list cols="4" rowHeight="1:1">
-  <mat-grid-tile *ngFor="let image of imagesList">
-    <img [src]="'file://' + inputDir + image">
+  <mat-grid-tile *ngFor="let imageSrc of imageSrcArray; let i = index">
+    <div>
+      <img [src]="imageSrc" (click)="selectPicture(i)">
+    </div>
   </mat-grid-tile>
 </mat-grid-list>
 

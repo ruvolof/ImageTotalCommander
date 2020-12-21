@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 
 import {GalleryRoutingModule} from './gallery/gallery-routing.module';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'gallery',
+    redirectTo: '/gallery',
     pathMatch: 'full'
   },
 ];
