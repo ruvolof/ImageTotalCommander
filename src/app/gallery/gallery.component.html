@@ -1,9 +1,12 @@
-<app-gallery-sidebar (imagesInFolder)="onImagesInFolder($event)">
+<app-gallery-sidebar [isSliderVisible]="isSliderVisible"
+                     (imagesInFolder)="onImagesInFolder($event)"
+                     (closeSlider)="onCloseSlider()">
 </app-gallery-sidebar>
-<app-gallery-slider *ngIf="selectedImageIndex !== -1"
+<app-gallery-slider *ngIf="isSliderVisible"
                     [selectedImageIndex]="selectedImageIndex"
                     [imagesArray]="imagesArray">
 </app-gallery-slider>
-<app-gallery-grid [imagesArray]="imagesArray"
+<app-gallery-grid *ngIf="isGridVisible"
+                  [imagesArray]="imagesArray"
                   (pictureSelected)="onPictureSelected($event)">
 </app-gallery-grid>
