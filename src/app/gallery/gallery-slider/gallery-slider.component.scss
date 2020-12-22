@@ -1,12 +1,13 @@
-img {
-  max-width: 700px;
-}
-
-.slider-row {
-  width: 100%;
+.gallery-slider{
+  display: block;
+  width: 85%;
 }
 
 .slider-picture-wrapper {
   width: 80%;
   margin: auto;
+}
+
+.slider-selected-image {
+  max-height: 700px;
 }

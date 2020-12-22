@@ -6,8 +6,8 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./gallery-slider.component.scss']
 })
 export class GallerySliderComponent implements OnInit {
-  @Input() imageIndex!: number;
-  @Input() imageSrcArray!: string[];
+  @Input() selectedImageIndex!: number;
+  @Input() imagesArray!: File[];
 
   constructor() { }
 

@@ -1,8 +1,9 @@
-<app-gallery-slider *ngIf="selectedPictureIndex !== -1"
-                    [imageIndex]="selectedPictureIndex"
-                    [imageSrcArray]="pictureSrcArray">
+<app-gallery-sidebar (imagesInFolder)="onImagesInFolder($event)">
+</app-gallery-sidebar>
+<app-gallery-slider *ngIf="selectedImageIndex !== -1"
+                    [selectedImageIndex]="selectedImageIndex"
+                    [imagesArray]="imagesArray">
 </app-gallery-slider>
-<app-gallery-grid [imageSrcArray]="pictureSrcArray"
-                  (directoryInput)="onDirectoryInput($event)"
+<app-gallery-grid [imagesArray]="imagesArray"
                   (pictureSelected)="onPictureSelected($event)">
 </app-gallery-grid>

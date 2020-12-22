@@ -11,6 +11,7 @@ import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
 import {GallerySliderComponent} from './gallery-slider/gallery-slider.component';
 import {GalleryRoutingModule} from './gallery-routing.module';
 import { GalleryComponent } from './gallery.component';
+import { GallerySidebarComponent } from './gallery-sidebar/gallery-sidebar.component';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { GalleryComponent } from './gallery.component';
     GalleryGridComponent,
     GallerySliderComponent,
     GalleryComponent,
+    GallerySidebarComponent,
   ],
   imports: [
     BrowserModule,
