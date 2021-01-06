@@ -11,8 +11,6 @@ export class AppComponent {
   constructor(
     private electronService: ElectronService,
   ) {
-    console.log('AppConfig', AppConfig);
-
     if (electronService.isElectron) {
       console.log('Running in electron');
     } else {

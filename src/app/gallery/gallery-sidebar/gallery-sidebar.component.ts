@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
+
 interface WebkitFileInterface extends File {
   webkitRelativePath: string;
 }

@@ -1,11 +1,26 @@
+.button-before {
+  float: left;
+  text-align: center;
+  width: 10%;
+}
+
+.button-next {
+  float: right;
+  text-align: center;
+  width: 10%;
+}
+
 .gallery-slider{
   display: block;
   width: 85%;
 }
 
 .slider-picture-wrapper {
+  box-sizing: border-box;
+  float: left;
   width: 80%;
   margin: auto;
+  padding: 10px;
 }
 
 .slider-selected-image {

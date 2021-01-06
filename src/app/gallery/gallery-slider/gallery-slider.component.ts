@@ -13,4 +13,18 @@ export class GallerySliderComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  public loadPreviousPicture(): void {
+    const arrayLength = this.imagesArray.length;
+    const previousIndex = (
+      (this.selectedImageIndex - 1) % arrayLength + arrayLength) % arrayLength;
+    this.selectedImageIndex = previousIndex;
+  }
+
+  public loadNextPicture(): void {
+    const arrayLength = this.imagesArray.length;
+    const nextIndex = (
+      (this.selectedImageIndex + 1) % arrayLength + arrayLength) % arrayLength;
+    this.selectedImageIndex = nextIndex;
+  }
+
 }
