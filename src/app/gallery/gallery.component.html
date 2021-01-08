@@ -1,12 +1,15 @@
-<app-gallery-sidebar [isSliderVisible]="isSliderVisible"
+<app-gallery-sidebar id="gallery-sidebar"
+                     [isSliderVisible]="isSliderVisible"
                      (imagesInFolder)="onImagesInFolder($event)"
                      (closeSlider)="onCloseSlider()">
 </app-gallery-sidebar>
 <app-gallery-slider *ngIf="isSliderVisible"
+                    id="gallery-slider"
                     [selectedImageIndex]="selectedImageIndex"
                     [imagesArray]="imagesArray">
 </app-gallery-slider>
 <app-gallery-grid *ngIf="isGridVisible"
+                  id="gallery-grid"
                   [imagesArray]="imagesArray"
                   (pictureSelected)="onPictureSelected($event)">
 </app-gallery-grid>

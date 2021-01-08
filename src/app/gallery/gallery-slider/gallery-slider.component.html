@@ -1,6 +1,7 @@
 <div class="gallery-slider">
   <div class="button-before">
-    <button mat-icon-button
+    <button id="slider-previous-button"
+            mat-icon-button
             aria-label="Show previous picture"
             (click)="loadPreviousPicture()">
       <mat-icon>navigate_before</mat-icon>
@@ -11,7 +12,8 @@
          [src]="'file://' + imagesArray[selectedImageIndex].path">
   </div>
   <div class="button-next">
-    <button mat-icon-button
+    <button id="slider-next-button"
+            mat-icon-button
             aria-label="Show next picture"
             (click)="loadNextPicture()">
       <mat-icon>navigate_next</mat-icon>

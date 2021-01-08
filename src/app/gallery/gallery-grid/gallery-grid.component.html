@@ -2,7 +2,9 @@
   <mat-grid-list cols="4" rowHeight="1:1">
     <mat-grid-tile *ngFor="let image of imagesArray; let i = index">
       <div>
-        <img [src]="'file://' + image.path" (click)="selectPicture(i)">
+        <img [src]="'file://' + image.path"
+             class="grid-image"
+             (click)="selectPicture(i)">
       </div>
     </mat-grid-tile>
   </mat-grid-list>

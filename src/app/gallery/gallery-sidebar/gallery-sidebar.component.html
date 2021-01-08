@@ -1,14 +1,16 @@
 <div class="gallery-sidebar">
   <div *ngIf="isSliderVisible"
        class="gallery-sidebar-widget">
-    <button mat-raised-button color="primary"
+    <button id="close-slider-button"
+            mat-raised-button 
+            color="primary"
             (click)="onCloseSliderClick()">
       Close Slider
     </button>
   </div>
   <div class="gallery-sidebar-widget">
     <input type="file" 
-          webkitdirectory
-          (change)="onDirectorySelected($event.target.files)">
+           webkitdirectory
+           (change)="onDirectorySelected($event.target.files)">
   </div>
 </div>
