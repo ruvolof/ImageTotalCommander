@@ -17,7 +17,7 @@ describe('GallerySidebarComponent', () => {
       imports: [GalleryModule],
       declarations: [ GallerySidebarComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
