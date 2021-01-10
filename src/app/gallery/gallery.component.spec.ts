@@ -1,7 +1,8 @@
+import {DebugElement} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 
-import {GalleryComponent} from './gallery.component';
+import {GalleryComponent, TagSetInterface} from './gallery.component';
 import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
 import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.component';
 import {GallerySliderComponent} from './gallery-slider/gallery-slider.component';
@@ -10,6 +11,9 @@ import {GalleryModule} from './gallery.module';
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
   let fixture: ComponentFixture<GalleryComponent>;
+  let galleryGrid: DebugElement;
+  let gallerySidebar: DebugElement;
+  let gallerySlider: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -23,6 +27,13 @@ describe('GalleryComponent', () => {
     fixture = TestBed.createComponent(GalleryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    galleryGrid = fixture.debugElement.query(
+      By.directive(GalleryGridComponent));
+    gallerySidebar = fixture.debugElement.query(
+      By.directive(GallerySidebarComponent));
+    gallerySlider = fixture.debugElement.query(
+      By.directive(GallerySliderComponent));
   });
 
   it('should create', () => {
@@ -37,21 +48,12 @@ describe('GalleryComponent', () => {
   });
 
   it('initializes the view', () => {
-    const galleryGrid = fixture.debugElement.query(
-      By.directive(GalleryGridComponent));
-    const gallerySidebar = fixture.debugElement.query(
-      By.directive(GallerySidebarComponent));
-    const gallerySlider = fixture.debugElement.query(
-      By.directive(GallerySliderComponent));
-
     expect(galleryGrid).toBeDefined();
     expect(gallerySidebar).toBeDefined();
     expect(gallerySlider).toBeNull();
   });
 
   it('populates array when images are received from the sidebar', () => {
-    const gallerySidebar = fixture.debugElement.query(
-      By.directive(GallerySidebarComponent));
     gallerySidebar.triggerEventHandler(
       'imagesInFolder', [new File([''], '1.jpg', {type: 'image/jpg'})]);
     fixture.detectChanges();
@@ -63,8 +65,6 @@ describe('GalleryComponent', () => {
 
   it('opens the slider when an image is selected on the grid', () => {
     component.imagesArray = [new File([''], '1.jpg', {type: 'image/jpg'})];
-    const galleryGrid = fixture.debugElement.query(
-      By.directive(GalleryGridComponent));
     galleryGrid.triggerEventHandler('pictureSelected', 0);
     fixture.detectChanges();
 
@@ -79,8 +79,6 @@ describe('GalleryComponent', () => {
 
   it('closes the slider when the sidebar emits closeSlide', () => {
     component.imagesArray = [new File([''], '1.jpg', {type: 'image/jpg'})];
-    const galleryGrid = fixture.debugElement.query(
-      By.directive(GalleryGridComponent));
     galleryGrid.triggerEventHandler('pictureSelected', 0);
     fixture.detectChanges();
 
@@ -92,8 +90,6 @@ describe('GalleryComponent', () => {
       By.directive(GallerySliderComponent))).toBeDefined();
     
     
-    const gallerySidebar = fixture.debugElement.query(
-      By.directive(GallerySidebarComponent));
     gallerySidebar.triggerEventHandler('closeSlider', null);
     fixture.detectChanges();
 
@@ -106,9 +102,63 @@ describe('GalleryComponent', () => {
       By.directive(GallerySliderComponent))).toBeNull();
   });
 
-  it('calls onAddTag when the sidebar emits it', () => {
-    const gallerySidebar = fixture.debugElement.query(
-      By.directive(GallerySidebarComponent));
-    gallerySidebar.triggerEventHandler('addTag', 'new_tag');
+  describe('onAddTag', () => {
+    beforeEach(() => {
+      component.imagesArray = [
+        new File([''], '1.jpg', {type: 'image/jpg'}),
+        new File([''], '2.jpg', {type: 'image/jpg'}),
+      ];
+    });
+
+    it('does nothing when no picture is selected', () => {
+      spyOn(component, 'onAddTag');
+      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
+      
+      expect(component.tagsStatus).toEqual(new Map<string, TagSetInterface>());
+    });
+
+    it('adds a new set when the tag is new', () => {
+      galleryGrid.triggerEventHandler('pictureSelected', 0);
+      fixture.detectChanges();
+      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
+      fixture.detectChanges();
+
+      const expectedTagsStatus = 
+        new Map<string,TagSetInterface>().set(
+          'new_tag', {filenames: new Set<string>().add('1.jpg')});
+
+      expect(component.tagsStatus).toEqual(expectedTagsStatus);
+    });
+
+    it('adds a filename to a pre existing tag set', () => {
+      galleryGrid.triggerEventHandler('pictureSelected', 0);
+      fixture.detectChanges();
+      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
+      fixture.detectChanges();
+      component.selectedImageIndex = 1;
+      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
+      fixture.detectChanges();
+
+      const expectedTagsStatus = 
+        new Map<string,TagSetInterface>().set(
+          'new_tag', {filenames: new Set<string>().add('1.jpg').add('2.jpg')});
+
+      expect(component.tagsStatus).toEqual(expectedTagsStatus);
+    });
+
+    it('does not add the same filename twice to the same tag set', () => {
+      galleryGrid.triggerEventHandler('pictureSelected', 0);
+      fixture.detectChanges();
+      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
+      fixture.detectChanges();
+      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
+      fixture.detectChanges();
+
+      const expectedTagsStatus = 
+        new Map<string,TagSetInterface>().set(
+          'new_tag', {filenames: new Set<string>().add('1.jpg')});
+
+      expect(component.tagsStatus).toEqual(expectedTagsStatus);
+    });
   });
 });
