@@ -8,12 +8,8 @@
       Close Slider
     </button>
   </div>
-  <div class="gallery-sidebar-widget">
-    <input type="file" 
-           webkitdirectory
-           (change)="onDirectorySelected($event.target.files)">
-  </div>
-  <div class="gallery-sidebar-widget">
+  <div *ngIf="isSliderVisible"
+       class="gallery-sidebar-widget">
     <mat-form-field>
       <mat-label>Tag</mat-label>
       <input matInput
@@ -28,5 +24,10 @@
             aria-label="Add tag to picture">
       <mat-icon>add</mat-icon>
     </button>
+  </div>
+  <div class="gallery-sidebar-widget">
+    <input type="file" 
+           webkitdirectory
+           (change)="onDirectorySelected($event.target.files)">
   </div>
 </div>
