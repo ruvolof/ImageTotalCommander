@@ -105,4 +105,10 @@ describe('GalleryComponent', () => {
     expect(fixture.debugElement.query(
       By.directive(GallerySliderComponent))).toBeNull();
   });
+
+  it('calls onAddTag when the sidebar emits it', () => {
+    const gallerySidebar = fixture.debugElement.query(
+      By.directive(GallerySidebarComponent));
+    gallerySidebar.triggerEventHandler('addTag', 'new_tag');
+  });
 });

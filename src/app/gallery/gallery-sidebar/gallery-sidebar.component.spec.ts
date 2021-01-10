@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import {HarnessLoader} from '@angular/cdk/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import { MatButtonHarness } from '@angular/material/button/testing';
+import {MatButtonHarness} from '@angular/material/button/testing';
+import {MatInputHarness} from '@angular/material/input/testing';
 
 import {GalleryModule} from '../gallery.module';
 import {GallerySidebarComponent} from './gallery-sidebar.component';
@@ -42,7 +44,6 @@ describe('GallerySidebarComponent', () => {
       MatButtonHarness.with({selector: '#close-slider-button'}));
     await closeSliderButton.click();
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(component.closeSlider.emit).toHaveBeenCalledOnceWith();
   });
 
@@ -50,10 +51,22 @@ describe('GallerySidebarComponent', () => {
     spyOn(component.imagesInFolder, 'emit');
     component.onDirectorySelected([] as unknown as FileList);
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(component.imagesInFolder.emit).toHaveBeenCalledOnceWith([]);
   });
 
   // TODO(ruvolof): add actual tests for the processing of files in the 
   // selected folder
+
+  it('emits addTag when the add button is clicked', async () => {
+    spyOn(component.addTag, 'emit');
+    const newTagInput = await loader.getHarness(
+      MatInputHarness.with({selector: '#new-tag-input'}));
+    const addNewTagButton = await loader.getHarness(
+      MatButtonHarness.with({selector: '#add-new-tag-button'}));
+    await newTagInput.setValue('new_tag');
+    await addNewTagButton.click();
+
+    expect(component.newTag).toEqual('new_tag');
+    expect(component.addTag.emit).toHaveBeenCalledOnceWith('new_tag');
+  });
 });

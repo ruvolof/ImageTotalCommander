@@ -16,8 +16,12 @@ export class GallerySidebarComponent implements OnInit {
   @Output() imagesInFolder = new EventEmitter();
   // Emits when the button to close the slider is clicked.
   @Output() closeSlider = new EventEmitter();
+  // Emits when the add tag button is clicked
+  @Output() addTag = new EventEmitter();
 
   @Input() isSliderVisible!: boolean;
+
+  newTag = '';
 
   constructor() { }
 
@@ -38,5 +42,11 @@ export class GallerySidebarComponent implements OnInit {
         return;
       });
     this.imagesInFolder.emit(imagesInSelectedFolder);
+  }
+
+  public onAddTagClick(): void {
+    if (this.newTag) {
+      this.addTag.emit(this.newTag);
+    }
   }
 }

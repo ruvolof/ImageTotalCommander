@@ -15,6 +15,10 @@ export class GalleryComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  public onAddTag(tag: string): void {
+    console.log(tag);
+  }
+
   public onCloseSlider(): void {
     this.selectedImageIndex = -1;
     this.updateMainView();

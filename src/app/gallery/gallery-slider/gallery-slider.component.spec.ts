@@ -16,7 +16,7 @@ describe('GallerySliderComponent', () => {
       imports: [GalleryModule],
       declarations: [GallerySliderComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -13,4 +13,20 @@
            webkitdirectory
            (change)="onDirectorySelected($event.target.files)">
   </div>
+  <div class="gallery-sidebar-widget">
+    <mat-form-field>
+      <mat-label>Tag</mat-label>
+      <input matInput
+             id="new-tag-input"
+             placeholder="New tag..."
+             [(ngModel)]="newTag">
+    </mat-form-field>
+    <button id="add-new-tag-button"
+            mat-raised-button
+            color="primary"
+            (click)="onAddTagClick()"
+            aria-label="Add tag to picture">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 </div>
