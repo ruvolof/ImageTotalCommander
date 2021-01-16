@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { TagSetInterface } from '../gallery.component';
 
 
 interface WebkitFileInterface extends File {
@@ -18,15 +19,18 @@ export class GallerySidebarComponent implements OnInit {
   @Output() closeSlider = new EventEmitter();
   // Emits when the add tag button is clicked
   @Output() addTag = new EventEmitter();
+  // Emits when a checkbox with a tag is clicked
+  @Output() toggleTag = new EventEmitter();
 
   @Input() isSliderVisible!: boolean;
+  @Input() availableTags!: Set<string>;
+  @Input() selectedTags!: Set<string>;
 
   newTag = '';
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   public onCloseSliderClick(): void {
     this.closeSlider.emit();
@@ -48,5 +52,9 @@ export class GallerySidebarComponent implements OnInit {
     if (this.newTag) {
       this.addTag.emit(this.newTag);
     }
+  }
+
+  public onTagCheckboxChange(tag: string): void {
+    this.toggleTag.emit(tag);
   }
 }

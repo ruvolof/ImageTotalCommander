@@ -1,8 +1,11 @@
 <app-gallery-sidebar id="gallery-sidebar"
                      [isSliderVisible]="isSliderVisible"
+                     [availableTags]="availableTags"
+                     [selectedTags]="selectedTags"
                      (imagesInFolder)="onImagesInFolder($event)"
                      (closeSlider)="onCloseSlider()"
-                     (addTag)="onAddTag($event)">
+                     (addTag)="onAddTag($event)"
+                     (toggleTag)="onToggleTag($event)">
 </app-gallery-sidebar>
 <app-gallery-slider *ngIf="isSliderVisible"
                     id="gallery-slider"

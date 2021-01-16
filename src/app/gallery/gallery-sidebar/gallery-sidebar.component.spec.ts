@@ -3,6 +3,7 @@ import {HarnessLoader} from '@angular/cdk/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
+import {MatCheckboxHarness} from '@angular/material/checkbox/testing';
 import {MatInputHarness} from '@angular/material/input/testing';
 
 import {GalleryModule} from '../gallery.module';
@@ -27,6 +28,8 @@ describe('GallerySidebarComponent', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
     component.isSliderVisible = true;
+    component.availableTags = new Set<string>().add('existing_tag');
+    component.selectedTags = new Set<string>();
     fixture.detectChanges();
   });
 
@@ -68,5 +71,13 @@ describe('GallerySidebarComponent', () => {
 
     expect(component.newTag).toEqual('new_tag');
     expect(component.addTag.emit).toHaveBeenCalledOnceWith('new_tag');
+  });
+
+  it('emits toggleTag when a checkbox is selected', async () => {
+    spyOn(component.toggleTag, 'emit');
+    const tagCheckbox = await loader.getHarness(MatCheckboxHarness);
+    await tagCheckbox.toggle();
+
+    expect(component.toggleTag.emit).toHaveBeenCalledOnceWith('existing_tag');
   });
 });

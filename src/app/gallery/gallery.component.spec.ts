@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import {DebugElement} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
@@ -108,6 +109,8 @@ describe('GalleryComponent', () => {
         new File([''], '1.jpg', {type: 'image/jpg'}),
         new File([''], '2.jpg', {type: 'image/jpg'}),
       ];
+
+      spyOn(component, 'updateTagView').and.callThrough();
     });
 
     it('does nothing when no picture is selected', () => {
@@ -127,6 +130,7 @@ describe('GalleryComponent', () => {
         new Map<string,TagSetInterface>().set(
           'new_tag', {filenames: new Set<string>().add('1.jpg')});
 
+      expect(component.updateTagView).toHaveBeenCalled();
       expect(component.tagsStatus).toEqual(expectedTagsStatus);
     });
 
@@ -143,6 +147,7 @@ describe('GalleryComponent', () => {
         new Map<string,TagSetInterface>().set(
           'new_tag', {filenames: new Set<string>().add('1.jpg').add('2.jpg')});
 
+      expect(component.updateTagView).toHaveBeenCalled();
       expect(component.tagsStatus).toEqual(expectedTagsStatus);
     });
 
@@ -158,7 +163,40 @@ describe('GalleryComponent', () => {
         new Map<string,TagSetInterface>().set(
           'new_tag', {filenames: new Set<string>().add('1.jpg')});
 
+      expect(component.updateTagView).toHaveBeenCalled();
       expect(component.tagsStatus).toEqual(expectedTagsStatus);
+    });
+  });
+
+  describe('onToggleTag', () => {
+    beforeEach(() => {
+      component.imagesArray = [
+        new File([''], '1.jpg', {type: 'image/jpg'}),
+        new File([''], '2.jpg', {type: 'image/jpg'}),
+      ];
+      component.tagsStatus.set(
+        'test_tag', {filenames: new Set<string>().add('1.jpg')});
+
+      spyOn(component, 'updateTagView').and.callThrough();
+    });
+
+    it('adds a tag to the currently selected image', () => {
+      component.selectedImageIndex = 1;
+      gallerySidebar.triggerEventHandler('toggleTag', 'test_tag');
+      fixture.detectChanges();
+
+      expect(component.updateTagView).toHaveBeenCalled();
+      expect(component.tagsStatus.get('test_tag')).toEqual(
+        {filenames: new Set<string>().add('1.jpg').add('2.jpg')});
+    });
+
+    it('removes a tag to the currently selected image', () => {
+      component.selectedImageIndex = 0;
+      gallerySidebar.triggerEventHandler('toggleTag', 'test_tag');
+      fixture.detectChanges();
+
+      expect(component.updateTagView).toHaveBeenCalled();
+      expect(component.tagsStatus.get('test_tag')).toBeUndefined();
     });
   });
 });
