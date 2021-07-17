@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-gallery-slider',
@@ -6,6 +6,8 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./gallery-slider.component.scss']
 })
 export class GallerySliderComponent implements OnInit {
+  @Output() selectedImageIndexChange = new EventEmitter();
+  
   @Input() selectedImageIndex!: number;
   @Input() imagesArray!: File[];
 
@@ -18,6 +20,7 @@ export class GallerySliderComponent implements OnInit {
     const previousIndex = (
       (this.selectedImageIndex - 1) % arrayLength + arrayLength) % arrayLength;
     this.selectedImageIndex = previousIndex;
+    this.selectedImageIndexChange.emit(this.selectedImageIndex);
   }
 
   public loadNextPicture(): void {
@@ -25,6 +28,6 @@ export class GallerySliderComponent implements OnInit {
     const nextIndex = (
       (this.selectedImageIndex + 1) % arrayLength + arrayLength) % arrayLength;
     this.selectedImageIndex = nextIndex;
+    this.selectedImageIndexChange.emit(this.selectedImageIndex);
   }
-
 }

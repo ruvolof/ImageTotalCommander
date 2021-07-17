@@ -9,7 +9,7 @@
 </app-gallery-sidebar>
 <app-gallery-slider *ngIf="isSliderVisible"
                     id="gallery-slider"
-                    [selectedImageIndex]="selectedImageIndex"
+                    [(selectedImageIndex)]="selectedImageIndex"
                     [imagesArray]="imagesArray">
 </app-gallery-slider>
 <app-gallery-grid *ngIf="isGridVisible"

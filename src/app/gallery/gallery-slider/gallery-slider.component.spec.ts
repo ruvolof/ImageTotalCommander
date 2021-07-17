@@ -23,6 +23,7 @@ describe('GallerySliderComponent', () => {
     fixture = TestBed.createComponent(GallerySliderComponent);
     loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
+    spyOn(component.selectedImageIndexChange, 'emit');
     component.imagesArray = [
       new File([""], "1.jpg", {type: 'image/jpg'}),
       new File([""], "2.jpg", {type: 'image/jpg'}),
@@ -41,6 +42,8 @@ describe('GallerySliderComponent', () => {
     await nextButton.click();
 
     expect(component.selectedImageIndex).toEqual(1);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(component.selectedImageIndexChange.emit).toHaveBeenCalledOnceWith(1);
   });
 
   it('navigates to previous picture', async () => {
@@ -49,5 +52,7 @@ describe('GallerySliderComponent', () => {
     await previousButton.click();
 
     expect(component.selectedImageIndex).toEqual(1);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(component.selectedImageIndexChange.emit).toHaveBeenCalledOnceWith(1);
   });
 });
