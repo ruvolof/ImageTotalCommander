@@ -114,6 +114,13 @@ describe('GalleryComponent', () => {
       By.directive(GallerySliderComponent))).toBeNull();
   });
 
+  it('updates tag view when selected image index changes', () => {
+    spyOn(component, 'updateTagView').and.callFake(() => {});
+    component.selectedImageIndex = 5;
+
+    expect(component.updateTagView).toHaveBeenCalledOnceWith();
+  });
+
   describe('onAddTag', () => {
     beforeEach(() => {
       component.imagesArray = [

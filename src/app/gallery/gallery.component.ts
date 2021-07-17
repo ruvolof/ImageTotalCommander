@@ -22,11 +22,17 @@ export interface WebkitFileInterface {
   styleUrls: ['./gallery.component.scss']
 })
 export class GalleryComponent implements OnInit {
-  public selectedImageIndex = -1;
   public selectedFolderPath = '';
   public imagesArray: WebkitFileInterface[] = [];
   public isSliderVisible = false;
   public isGridVisible = true;
+
+  private _selectedImageIndex = -1;
+  get selectedImageIndex(): number {return this._selectedImageIndex;}
+  set selectedImageIndex(newValue: number) {
+    this._selectedImageIndex = newValue;
+    this.updateTagView();
+  }
 
   tagsStatus: Map<string,TagSetInterface>;
   availableTags: Set<string>;
