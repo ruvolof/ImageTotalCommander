@@ -30,6 +30,10 @@
            webkitdirectory
            (change)="onDirectorySelected($event.target.files)">
   </div>
+  <div *ngIf="selectedFolderPath"
+       class="break-word">
+    Showing: {{selectedFolderPath}}
+  </div>
   <div *ngIf="availableTags.size > 0"
        class="gallery-sidebar-widget">
     <div>Tags</div>

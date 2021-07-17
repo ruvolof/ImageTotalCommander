@@ -21,6 +21,7 @@ export class GallerySidebarComponent implements OnInit {
   @Input() selectedTags!: Set<string>;
 
   newTag = '';
+  selectedFolderPath = '';
 
   constructor() { }
 
@@ -42,10 +43,10 @@ export class GallerySidebarComponent implements OnInit {
           });
     if (imagesInSelectedFolder.length > 0) {
       const sampleFile = imagesInSelectedFolder[0];
-      const directoryAbsolutePath = 
+      this.selectedFolderPath = 
           sampleFile.path.replace('/' + sampleFile.name, '');
       this.selectedFolder.emit({
-        absolutePath: directoryAbsolutePath,
+        absolutePath: this.selectedFolderPath,
         files: imagesInSelectedFolder
       } as SelectedFolderInterface);
     }
