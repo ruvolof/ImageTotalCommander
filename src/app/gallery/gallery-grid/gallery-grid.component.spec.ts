@@ -2,8 +2,9 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {GalleryGridComponent} from './gallery-grid.component';
 import {GalleryModule} from '../gallery.module';
-import { By } from '@angular/platform-browser';
+import {By} from '@angular/platform-browser';
 
+import {makeWebkitFileInterface} from '../gallery.component.spec';
 
 describe('GalleryGridComponent', () => {
   let component: GalleryGridComponent;
@@ -20,8 +21,7 @@ describe('GalleryGridComponent', () => {
     fixture = TestBed.createComponent(GalleryGridComponent);
     component = fixture.componentInstance;
     component.imagesArray = [
-      new File([""], "1.jpg", {type: 'image/jpg'}),
-      new File([""], "2.jpg", {type: 'image/jpg'}),
+      makeWebkitFileInterface('1'), makeWebkitFileInterface('2')
     ];
     fixture.detectChanges();
   });

@@ -33,11 +33,12 @@ export class GallerySidebarComponent implements OnInit {
 
   public onDirectorySelected(fileList: FileList): void {
     const imagesInSelectedFolder: WebkitFileInterface[] = 
-        Array.from(fileList).filter(
-          (file: WebkitFileInterface) => {
-            if (file.type.startsWith('image/') 
-                && file.webkitRelativePath.split('/').length === 2) {
-              return file;
+        Array.from(fileList)
+          .map(file => file as unknown as WebkitFileInterface)
+          .filter(fileInterface => {
+            if (fileInterface.type.startsWith('image/') 
+                && fileInterface.webkitRelativePath.split('/').length === 2) {
+              return fileInterface;
             }
             return;
           });
@@ -48,6 +49,11 @@ export class GallerySidebarComponent implements OnInit {
       this.selectedFolder.emit({
         absolutePath: this.selectedFolderPath,
         files: imagesInSelectedFolder
+      } as SelectedFolderInterface);
+    } else {
+      this.selectedFolder.emit({
+        absolutePath: '',
+        files: []
       } as SelectedFolderInterface);
     }
   }

@@ -9,9 +9,10 @@ export interface SelectedFolderInterface {
   files: WebkitFileInterface[];
 }
 
-export interface WebkitFileInterface extends File {
+export interface WebkitFileInterface {
   name: string;
   path: string;
+  type: string;
   webkitRelativePath: string;
 }
 

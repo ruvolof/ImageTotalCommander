@@ -3,11 +3,20 @@ import {DebugElement} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 
-import {GalleryComponent, TagSetInterface} from './gallery.component';
+import {GalleryComponent, SelectedFolderInterface, TagSetInterface, WebkitFileInterface} from './gallery.component';
 import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
 import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.component';
 import {GallerySliderComponent} from './gallery-slider/gallery-slider.component';
 import {GalleryModule} from './gallery.module';
+
+export function makeWebkitFileInterface(fileId: string) {
+  return {
+    name: `${fileId}.jpg`,
+    path: `/abs/path/${fileId}.jpg`,
+    type: 'image/jpg',
+    webkitRelativePath: `path/${fileId}.jpg1`
+  } as WebkitFileInterface;
+}
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
@@ -56,16 +65,18 @@ describe('GalleryComponent', () => {
 
   it('populates array when images are received from the sidebar', () => {
     gallerySidebar.triggerEventHandler(
-      'imagesInFolder', [new File([''], '1.jpg', {type: 'image/jpg'})]);
+      'selectedFolder', {
+        absolutePath: '/abs/path', 
+        files: [makeWebkitFileInterface('1')]
+      } as SelectedFolderInterface);
     fixture.detectChanges();
 
-    expect(component.imagesArray).toEqual(
-      [new File([''], '1.jpg', {type: 'image/jpg'})]
-    );
+    expect(component.imagesArray).toEqual([makeWebkitFileInterface('1')]);
+    expect(component.selectedFolderPath).toEqual('/abs/path');
   });
 
   it('opens the slider when an image is selected on the grid', () => {
-    component.imagesArray = [new File([''], '1.jpg', {type: 'image/jpg'})];
+    component.imagesArray = [makeWebkitFileInterface('1')];
     galleryGrid.triggerEventHandler('pictureSelected', 0);
     fixture.detectChanges();
 
@@ -79,7 +90,7 @@ describe('GalleryComponent', () => {
   });
 
   it('closes the slider when the sidebar emits closeSlide', () => {
-    component.imagesArray = [new File([''], '1.jpg', {type: 'image/jpg'})];
+    component.imagesArray = [makeWebkitFileInterface('1')];
     galleryGrid.triggerEventHandler('pictureSelected', 0);
     fixture.detectChanges();
 
@@ -106,8 +117,8 @@ describe('GalleryComponent', () => {
   describe('onAddTag', () => {
     beforeEach(() => {
       component.imagesArray = [
-        new File([''], '1.jpg', {type: 'image/jpg'}),
-        new File([''], '2.jpg', {type: 'image/jpg'}),
+        makeWebkitFileInterface('1'),
+        makeWebkitFileInterface('2'),
       ];
 
       spyOn(component, 'updateTagView').and.callThrough();
@@ -171,8 +182,8 @@ describe('GalleryComponent', () => {
   describe('onToggleTag', () => {
     beforeEach(() => {
       component.imagesArray = [
-        new File([''], '1.jpg', {type: 'image/jpg'}),
-        new File([''], '2.jpg', {type: 'image/jpg'}),
+        makeWebkitFileInterface('1'),
+        makeWebkitFileInterface('2'),
       ];
       component.tagsStatus.set(
         'test_tag', {filenames: new Set<string>().add('1.jpg')});

@@ -5,6 +5,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
 import {MatCheckboxHarness} from '@angular/material/checkbox/testing';
 import {MatInputHarness} from '@angular/material/input/testing';
+import { SelectedFolderInterface } from '../gallery.component';
 
 import {GalleryModule} from '../gallery.module';
 import {GallerySidebarComponent} from './gallery-sidebar.component';
@@ -51,10 +52,13 @@ describe('GallerySidebarComponent', () => {
   });
 
   it('emits imagesInFolder after processing images', () => {
-    spyOn(component.imagesInFolder, 'emit');
+    spyOn(component.selectedFolder, 'emit');
     component.onDirectorySelected([] as unknown as FileList);
 
-    expect(component.imagesInFolder.emit).toHaveBeenCalledOnceWith([]);
+    expect(component.selectedFolder.emit).toHaveBeenCalledOnceWith({
+      absolutePath: '',
+      files: []
+    } as SelectedFolderInterface);
   });
 
   // TODO(ruvolof): add actual tests for the processing of files in the 
