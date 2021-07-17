@@ -1,11 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { TagSetInterface } from '../gallery.component';
-
-
-interface WebkitFileInterface extends File {
-  webkitRelativePath: string;
-}
-
+import {WebkitFileInterface, SelectedFolderInterface} from '../gallery.component';
 
 @Component({
   selector: 'app-gallery-sidebar',
@@ -13,8 +7,8 @@ interface WebkitFileInterface extends File {
   styleUrls: ['./gallery-sidebar.component.scss']
 })
 export class GallerySidebarComponent implements OnInit {
-  // Emits a File[] with images in the selected folder.
-  @Output() imagesInFolder = new EventEmitter();
+  // Emits a SelectedFolderInterface.
+  @Output() selectedFolder = new EventEmitter();
   // Emits when the button to close the slider is clicked.
   @Output() closeSlider = new EventEmitter();
   // Emits when the add tag button is clicked
@@ -37,15 +31,24 @@ export class GallerySidebarComponent implements OnInit {
   }
 
   public onDirectorySelected(fileList: FileList): void {
-    const imagesInSelectedFolder = Array.from(fileList).filter(
-      (file: WebkitFileInterface) => {
-        if (file.type.startsWith('image/') 
-            && file.webkitRelativePath.split('/').length === 2) {
-          return file;
-        }
-        return;
-      });
-    this.imagesInFolder.emit(imagesInSelectedFolder);
+    const imagesInSelectedFolder: WebkitFileInterface[] = 
+        Array.from(fileList).filter(
+          (file: WebkitFileInterface) => {
+            if (file.type.startsWith('image/') 
+                && file.webkitRelativePath.split('/').length === 2) {
+              return file;
+            }
+            return;
+          });
+    if (imagesInSelectedFolder.length > 0) {
+      const sampleFile = imagesInSelectedFolder[0];
+      const directoryAbsolutePath = 
+          sampleFile.path.replace('/' + sampleFile.name, '');
+      this.selectedFolder.emit({
+        absolutePath: directoryAbsolutePath,
+        files: imagesInSelectedFolder
+      } as SelectedFolderInterface);
+    }
   }
 
   public onAddTagClick(): void {

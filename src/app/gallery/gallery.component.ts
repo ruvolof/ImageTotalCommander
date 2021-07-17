@@ -1,11 +1,19 @@
-import { ValueTransformer } from '@angular/compiler/src/util';
 import {Component, OnInit} from '@angular/core';
-
 
 export interface TagSetInterface {
   filenames: Set<string>;
 }
 
+export interface SelectedFolderInterface {
+  absolutePath: string;
+  files: WebkitFileInterface[];
+}
+
+export interface WebkitFileInterface extends File {
+  name: string;
+  path: string;
+  webkitRelativePath: string;
+}
 
 @Component({
   selector: 'app-gallery',
@@ -14,7 +22,8 @@ export interface TagSetInterface {
 })
 export class GalleryComponent implements OnInit {
   public selectedImageIndex = -1;
-  public imagesArray: File[] = [];
+  public selectedFolderPath = '';
+  public imagesArray: WebkitFileInterface[] = [];
   public isSliderVisible = false;
   public isGridVisible = true;
 
@@ -55,14 +64,15 @@ export class GalleryComponent implements OnInit {
     this.updateTagView();
   }
 
-  public onImagesInFolder(images: File[]): void {
-    this.imagesArray = images;
-  }
-
   public onPictureSelected(index: number): void {
     this.selectedImageIndex = index;
     this.updateMainView();
     this.updateTagView();
+  }
+
+  public onSelectedFolder(selectedFolder: SelectedFolderInterface): void {
+    this.imagesArray = selectedFolder.files;
+    this.selectedFolderPath = selectedFolder.absolutePath;
   }
 
   public onToggleTag(tag: string): void {
