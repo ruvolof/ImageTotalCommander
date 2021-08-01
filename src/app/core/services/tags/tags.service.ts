@@ -30,6 +30,19 @@ export class TagsService {
     //TODO: Add call to save the tags status.
   }
 
+  public toggleTag(tag: string, filename: string): void {
+    const tagSetInterface = this.tagsStatus.get(tag);
+    if (tagSetInterface.filenames.has(filename)) {
+      tagSetInterface.filenames.delete(filename);
+      if (tagSetInterface.filenames.size == 0) {
+        this.tagsStatus.delete(tag);
+      }
+    } else {
+      tagSetInterface.filenames.add(filename);
+    }
+    //TODO: Add call to save the tags status.
+  }
+
   saveTagsStatus(tagsStatus: Map<string, TagSetInterface>, 
                  destinationFolder: string): void {
     const serializedMap = JSON.stringify(Array.from(tagsStatus.entries()), null, 2);

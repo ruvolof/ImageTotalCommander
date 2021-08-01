@@ -75,23 +75,10 @@ export class GalleryComponent implements OnInit {
 
   public onToggleTag(tag: string): void {
     if (this.isImageSelected()) {
-      this.toggleTagForSelected(tag);
+      this.tagsService.toggleTag(
+        tag, this.imagesArray[this.selectedImageIndex].name);
     }
     this.updateTagView();
-  }
-
-  toggleTagForSelected(tag: string): void {
-    const tagSetInterface = this.tagsStatus.get(tag);
-    const selectedFilename = this.imagesArray[this.selectedImageIndex].name;
-    if (tagSetInterface.filenames.has(selectedFilename)) {
-      tagSetInterface.filenames.delete(selectedFilename);
-      if (tagSetInterface.filenames.size < 1) {
-        this.tagsStatus.delete(tag);
-      }
-    } else {
-      tagSetInterface.filenames.add(selectedFilename);
-    }
-    this.tagsService.saveTagsStatus(this.tagsStatus, this.selectedFolderPath);
   }
 
   updateMainView(): void {

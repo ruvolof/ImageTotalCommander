@@ -33,4 +33,22 @@ describe('TagsService', () => {
           {filenames: new Set<string>().add('file_1').add('file_2')});
     expect(service.tagsStatus).toEqual(expectedTagsStatus);
   });
+
+  it('toogles tag status', () => {
+    service.addTag('tag', 'file_1');
+    service.toggleTag('tag', 'file_2');
+
+    expect(service.tagsStatus.get('tag').filenames.has('file_2')).toBeTrue();
+    
+    service.toggleTag('tag', 'file_2');
+
+    expect(service.tagsStatus.get('tag').filenames.has('file_2')).toBeFalse();
+  });
+
+  it('removes tag when removing last filename entry', () => {
+    service.addTag('tag', 'file_1');
+    service.toggleTag('tag', 'file_1');
+
+    expect(service.tagsStatus.size).toEqual(0);
+  });
 });
