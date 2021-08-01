@@ -3,13 +3,15 @@ import {DebugElement} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 
-import {GalleryComponent, SelectedFolderInterface, TagSetInterface, WebkitFileInterface} from './gallery.component';
+import {TagSetInterface} from '../core/services/tags/tags.service';
+
+import {GalleryComponent, SelectedFolderInterface, WebkitFileInterface} from './gallery.component';
 import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
 import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.component';
 import {GallerySliderComponent} from './gallery-slider/gallery-slider.component';
 import {GalleryModule} from './gallery.module';
 
-export function makeWebkitFileInterface(fileId: string) {
+export function makeWebkitFileInterface(fileId: string): WebkitFileInterface {
   return {
     name: `${fileId}.jpg`,
     path: `/abs/path/${fileId}.jpg`,

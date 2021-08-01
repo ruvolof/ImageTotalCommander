@@ -12,7 +12,11 @@ export interface TagSetInterface {
 export class TagsService {
   readonly tagsMapCacheFilename = '.itc_tags_map';
 
-  constructor(private readonly electronService: ElectronService) {}
+  tagsStatus: Map<string,TagSetInterface>;
+
+  constructor(private readonly electronService: ElectronService) {
+    this.tagsStatus = new Map<string,TagSetInterface>();
+  }
 
   saveTagsStatus(tagsStatus: Map<string, TagSetInterface>, 
                  destinationFolder: string): void {

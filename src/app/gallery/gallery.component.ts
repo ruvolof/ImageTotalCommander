@@ -39,7 +39,7 @@ export class GalleryComponent implements OnInit {
   constructor(private readonly tagsService: TagsService) { }
 
   ngOnInit(): void {
-    this.tagsStatus = new Map<string,TagSetInterface>();
+    this.tagsStatus = this.tagsService.tagsStatus;
     this.availableTags = new Set<string>();
     this.selectedTags = new Set<string>();
   }
