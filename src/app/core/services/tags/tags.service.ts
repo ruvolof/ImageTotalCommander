@@ -18,6 +18,18 @@ export class TagsService {
     this.tagsStatus = new Map<string,TagSetInterface>();
   }
 
+  public addTag(tag: string, filename: string): void {
+    let tagSetInterface = this.tagsStatus.get(tag);
+    if (tagSetInterface === undefined) {
+      tagSetInterface = {
+        filenames: new Set<string>(),
+      };
+      this.tagsStatus.set(tag, tagSetInterface);
+    }
+    tagSetInterface.filenames.add(filename);
+    //TODO: Add call to save the tags status.
+  }
+
   saveTagsStatus(tagsStatus: Map<string, TagSetInterface>, 
                  destinationFolder: string): void {
     const serializedMap = JSON.stringify(Array.from(tagsStatus.entries()), null, 2);

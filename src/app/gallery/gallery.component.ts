@@ -50,17 +50,8 @@ export class GalleryComponent implements OnInit {
 
   public onAddTag(tag: string): void {
     if (this.isImageSelected()) {
-      let tagSetInterface = this.tagsStatus.get(tag);
-      if (tagSetInterface === undefined) {
-        tagSetInterface = {
-          filenames: new Set<string>(),
-        };
-        this.tagsStatus.set(tag, tagSetInterface);
-      }
-      tagSetInterface.filenames.add(
-        this.imagesArray[this.selectedImageIndex].name);
-      this.tagsService.saveTagsStatus(
-        this.tagsStatus, this.selectedFolderPath);
+      this.tagsService.addTag(
+        tag, this.imagesArray[this.selectedImageIndex].name);
     }
     this.updateTagView();
   }
