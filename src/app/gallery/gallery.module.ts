@@ -10,6 +10,8 @@ import {MatInputModule} from '@angular/material/input';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
+import {CoreModule} from '../core/core.module';
+
 import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
 import {GallerySliderComponent} from './gallery-slider/gallery-slider.component';
 import {GalleryRoutingModule} from './gallery-routing.module';
@@ -35,6 +37,7 @@ import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.compone
     MatGridListModule,
     MatIconModule,
     MatInputModule,
+    CoreModule,
     GalleryRoutingModule,
   ],
 })

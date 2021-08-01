@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 
-export interface TagSetInterface {
-  filenames: Set<string>;
-}
+import {TagSetInterface, TagsService} from '../core/services/tags/tags.service';
 
 export interface SelectedFolderInterface {
   absolutePath: string;
@@ -38,7 +36,7 @@ export class GalleryComponent implements OnInit {
   availableTags: Set<string>;
   selectedTags: Set<string>;
 
-  constructor() { }
+  constructor(private readonly tagsService: TagsService) { }
 
   ngOnInit(): void {
     this.tagsStatus = new Map<string,TagSetInterface>();
@@ -61,6 +59,8 @@ export class GalleryComponent implements OnInit {
       }
       tagSetInterface.filenames.add(
         this.imagesArray[this.selectedImageIndex].name);
+      this.tagsService.saveTagsStatus(
+        this.tagsStatus, this.selectedFolderPath);
     }
     this.updateTagView();
   }
@@ -100,6 +100,7 @@ export class GalleryComponent implements OnInit {
     } else {
       tagSetInterface.filenames.add(selectedFilename);
     }
+    this.tagsService.saveTagsStatus(this.tagsStatus, this.selectedFolderPath);
   }
 
   updateMainView(): void {
