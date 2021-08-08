@@ -1,6 +1,6 @@
 import {TestBed} from '@angular/core/testing';
 
-import {TagsService, TagSetInterface} from './tags.service';
+import {TagsService, TagSetInterface, mapAndSetReplacer, mapAndSetReviver} from './tags.service';
 
 describe('TagsService', () => {
   let service: TagsService;
@@ -50,5 +50,24 @@ describe('TagsService', () => {
     service.toggleTag('tag', 'file_1');
 
     expect(service.tagsStatus.size).toEqual(0);
+  });
+
+  describe('TagsStatus serialization', () => {
+    it('works', () => {
+      const controlTagsStatus = new Map<string, TagSetInterface>().set(
+        'tag_name', {
+          filenames: new Set<string>().add('file_name'),
+        }
+      );
+      const serialized = JSON.stringify(controlTagsStatus, mapAndSetReplacer);
+      const resultTagsStatus = JSON.parse(serialized, mapAndSetReviver);
+      
+      expect(controlTagsStatus).toEqual(resultTagsStatus);
+      expect(resultTagsStatus.size).toEqual(1);
+      expect(Array.from(resultTagsStatus.keys())).toEqual(['tag_name']);
+      expect(resultTagsStatus.get('tag_name').filenames.size).toEqual(1);
+      expect(Array.from(resultTagsStatus.get('tag_name').filenames))
+        .toEqual(['file_name']);
+    });
   });
 });

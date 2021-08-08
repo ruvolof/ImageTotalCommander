@@ -6,11 +6,47 @@ export interface TagSetInterface {
   filenames: Set<string>;
 }
 
+export interface StringifyInterface {
+  dataType: string;
+  value: Array<any>;
+}
+
+type TagsStatusTypes = Map<string,TagSetInterface>|Set<string>|string;
+
+export function mapAndSetReplacer(key: string, value: TagsStatusTypes): any {
+  if(value instanceof Map) {
+    return {
+      dataType: 'Map',
+      value: Array.from(value.entries()),
+    } as StringifyInterface;
+  }
+  if (value instanceof Set) {
+    return {
+      dataType: 'Set',
+      value: Array.from(value)
+    } as StringifyInterface;
+  }
+  return value;
+}
+
+export function mapAndSetReviver(key: string, value: unknown): any {
+  if(typeof value === 'object' && value !== null) {
+    const castedValue = value as StringifyInterface;
+    if (castedValue.dataType === 'Map') {
+      return new Map(castedValue.value);
+    }
+    if (castedValue.dataType === 'Set') {
+      return new Set(castedValue.value);
+    }
+  }
+  return value;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class TagsService {
-  readonly tagsMapCacheFilename = '.itc_tags_map';
+  readonly tagsMapCacheFilename = '';
 
   tagsStatus: Map<string,TagSetInterface>;
 
@@ -27,7 +63,6 @@ export class TagsService {
       this.tagsStatus.set(tag, tagSetInterface);
     }
     tagSetInterface.filenames.add(filename);
-    //TODO: Add call to save the tags status.
   }
 
   public toggleTag(tag: string, filename: string): void {
