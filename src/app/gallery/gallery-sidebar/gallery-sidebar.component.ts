@@ -41,6 +41,10 @@ export class GallerySidebarComponent implements OnInit {
               return fileInterface;
             }
             return;
+          }).sort((a: WebkitFileInterface, b: WebkitFileInterface) => {
+            const textA = a.path.toUpperCase();
+            const textB = b.path.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
           });
     if (imagesInSelectedFolder.length > 0) {
       const sampleFile = imagesInSelectedFolder[0];
