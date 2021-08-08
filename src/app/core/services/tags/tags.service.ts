@@ -60,15 +60,21 @@ export class TagsService {
       this.electronService.os.homedir() + localStorageFolderPath;
     this.absTagsStatusStorageFile = 
       this.absLocalStorageFolder + localTagsStatusFilePath;
-    this.initializeStorageFolder();
+    this.initializeTagsService();
   }
 
-  private initializeStorageFolder() {
+  private initializeTagsService() {
     this.electronService.fs.mkdir(
       this.absLocalStorageFolder, { recursive: true }, (err) => {
         if (err) throw err;
         console.log('Initial storage folder created.');
       });
+    if (this.electronService.fs.existsSync(this.absTagsStatusStorageFile)) {
+      const serializedString = this.electronService.fs.readFileSync(
+        this.absTagsStatusStorageFile, 'utf8');
+      this.tagsStatus = 
+        new Map(JSON.parse(serializedString, mapAndSetReviver));
+    }
   }
 
   public addTag(tag: string, filename: string): void {

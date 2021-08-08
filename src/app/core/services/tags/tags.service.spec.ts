@@ -6,13 +6,14 @@ import {TagsService, TagSetInterface, mapAndSetReplacer, mapAndSetReviver} from 
 describe('TagsService', () => {
   let service: TagsService;
 
-  beforeAll(() => {
-    mock();
-  });
-
   beforeEach(() => {
+    mock();
     TestBed.configureTestingModule({});
     service = TestBed.inject(TagsService);
+  });
+
+  afterEach(() => {
+    mock.restore;
   });
 
   it('should be created', () => {

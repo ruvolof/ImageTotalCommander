@@ -28,16 +28,17 @@ describe('GalleryComponent', () => {
   let gallerySidebar: DebugElement;
   let gallerySlider: DebugElement;
 
-  beforeAll(() => {
-    mock();
-  });
-
   beforeEach(async () => {
+    mock();
     await TestBed.configureTestingModule({
       imports: [GalleryModule],
       declarations: [GalleryComponent]
     })
       .compileComponents();
+  });
+
+  afterEach(() => {
+    mock.restore;
   });
 
   beforeEach(() => {
