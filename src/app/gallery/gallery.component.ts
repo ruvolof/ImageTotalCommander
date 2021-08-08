@@ -51,7 +51,7 @@ export class GalleryComponent implements OnInit {
   public onAddTag(tag: string): void {
     if (this.isImageSelected()) {
       this.tagsService.addTag(
-        tag, this.imagesArray[this.selectedImageIndex].name);
+        tag, this.imagesArray[this.selectedImageIndex].path);
     }
     this.updateTagView();
   }
@@ -76,7 +76,7 @@ export class GalleryComponent implements OnInit {
   public onToggleTag(tag: string): void {
     if (this.isImageSelected()) {
       this.tagsService.toggleTag(
-        tag, this.imagesArray[this.selectedImageIndex].name);
+        tag, this.imagesArray[this.selectedImageIndex].path);
     }
     this.updateTagView();
   }
@@ -92,7 +92,7 @@ export class GalleryComponent implements OnInit {
       this.selectedTags = new Set(
         Array.from(this.tagsStatus).map(([key, value]) => {
           if(value.filenames.has(
-            this.imagesArray[this.selectedImageIndex].name)) {
+            this.imagesArray[this.selectedImageIndex].path)) {
             return  key;
           } else {
             return;

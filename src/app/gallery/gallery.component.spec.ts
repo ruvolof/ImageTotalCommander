@@ -2,6 +2,7 @@
 import {DebugElement} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
+import mock from 'mock-fs';
 
 import {TagSetInterface} from '../core/services/tags/tags.service';
 
@@ -26,6 +27,10 @@ describe('GalleryComponent', () => {
   let galleryGrid: DebugElement;
   let gallerySidebar: DebugElement;
   let gallerySlider: DebugElement;
+
+  beforeAll(() => {
+    mock();
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -148,7 +153,7 @@ describe('GalleryComponent', () => {
 
       const expectedTagsStatus = 
         new Map<string,TagSetInterface>().set(
-          'new_tag', {filenames: new Set<string>().add('1.jpg')});
+          'new_tag', {filenames: new Set<string>().add('/abs/path/1.jpg')});
 
       expect(component.updateTagView).toHaveBeenCalled();
       expect(component.tagsStatus).toEqual(expectedTagsStatus);
@@ -165,7 +170,10 @@ describe('GalleryComponent', () => {
 
       const expectedTagsStatus = 
         new Map<string,TagSetInterface>().set(
-          'new_tag', {filenames: new Set<string>().add('1.jpg').add('2.jpg')});
+          'new_tag', {
+            filenames: 
+              new Set<string>().add('/abs/path/1.jpg').add('/abs/path/2.jpg')
+          });
 
       expect(component.updateTagView).toHaveBeenCalled();
       expect(component.tagsStatus).toEqual(expectedTagsStatus);
@@ -181,7 +189,7 @@ describe('GalleryComponent', () => {
 
       const expectedTagsStatus = 
         new Map<string,TagSetInterface>().set(
-          'new_tag', {filenames: new Set<string>().add('1.jpg')});
+          'new_tag', {filenames: new Set<string>().add('/abs/path/1.jpg')});
 
       expect(component.updateTagView).toHaveBeenCalled();
       expect(component.tagsStatus).toEqual(expectedTagsStatus);
@@ -195,7 +203,7 @@ describe('GalleryComponent', () => {
         makeWebkitFileInterface('2'),
       ];
       component.tagsStatus.set(
-        'test_tag', {filenames: new Set<string>().add('1.jpg')});
+        'test_tag', {filenames: new Set<string>().add('/abs/path/1.jpg')});
 
       spyOn(component, 'updateTagView').and.callThrough();
     });
@@ -206,8 +214,9 @@ describe('GalleryComponent', () => {
       fixture.detectChanges();
 
       expect(component.updateTagView).toHaveBeenCalled();
-      expect(component.tagsStatus.get('test_tag')).toEqual(
-        {filenames: new Set<string>().add('1.jpg').add('2.jpg')});
+      expect(component.tagsStatus.get('test_tag')).toEqual({
+        filenames: 
+          new Set<string>().add('/abs/path/1.jpg').add('/abs/path/2.jpg')});
     });
 
     it('removes a tag to the currently selected image', () => {
