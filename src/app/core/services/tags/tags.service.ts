@@ -11,6 +11,7 @@ export interface StringifyInterface {
   value: Array<any>;
 }
 
+type TagsStatus = Map<string,TagSetInterface>;
 type TagsStatusTypes = Map<string,TagSetInterface>|Set<string>|string;
 
 export function mapAndSetReplacer(key: string, value: TagsStatusTypes): any {
@@ -48,7 +49,7 @@ export function mapAndSetReviver(key: string, value: unknown): any {
 export class TagsService {
   readonly tagsMapCacheFilename = '';
 
-  tagsStatus: Map<string,TagSetInterface>;
+  tagsStatus: TagsStatus;
 
   constructor(private readonly electronService: ElectronService) {
     this.tagsStatus = new Map<string,TagSetInterface>();
