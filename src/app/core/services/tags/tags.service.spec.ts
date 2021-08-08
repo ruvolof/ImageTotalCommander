@@ -1,9 +1,14 @@
 import {TestBed} from '@angular/core/testing';
 
+import mock from 'mock-fs';
 import {TagsService, TagSetInterface, mapAndSetReplacer, mapAndSetReviver} from './tags.service';
 
 describe('TagsService', () => {
   let service: TagsService;
+
+  beforeAll(() => {
+    mock();
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

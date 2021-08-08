@@ -43,16 +43,32 @@ export function mapAndSetReviver(key: string, value: unknown): any {
   return value;
 }
 
+const localStorageFolderPath = '/.local/share/ImageTotalCommander';
+const localTagsStatusFilePath = '/TagsStatus.json';
+
 @Injectable({
   providedIn: 'root'
 })
 export class TagsService {
-  readonly tagsMapCacheFilename = '';
-
   tagsStatus: TagsStatus;
+  absLocalStorageFolder: string;
+  absTagsStatusStorageFile: string;
 
   constructor(private readonly electronService: ElectronService) {
     this.tagsStatus = new Map<string,TagSetInterface>();
+    this.absLocalStorageFolder = 
+      this.electronService.os.homedir() + localStorageFolderPath;
+    this.absTagsStatusStorageFile = 
+      this.absLocalStorageFolder + localTagsStatusFilePath;
+    this.initializeStorageFolder();
+  }
+
+  private initializeStorageFolder() {
+    this.electronService.fs.mkdir(
+      this.absLocalStorageFolder, { recursive: true }, (err) => {
+        if (err) throw err;
+        console.log('Initial storage folder created.');
+      });
   }
 
   public addTag(tag: string, filename: string): void {
@@ -64,6 +80,7 @@ export class TagsService {
       this.tagsStatus.set(tag, tagSetInterface);
     }
     tagSetInterface.filenames.add(filename);
+    this.saveTagsStatus();
   }
 
   public toggleTag(tag: string, filename: string): void {
@@ -76,15 +93,16 @@ export class TagsService {
     } else {
       tagSetInterface.filenames.add(filename);
     }
-    //TODO: Add call to save the tags status.
+    this.saveTagsStatus();
   }
 
-  saveTagsStatus(tagsStatus: Map<string, TagSetInterface>, 
-                 destinationFolder: string): void {
-    const serializedMap = JSON.stringify(Array.from(tagsStatus.entries()), null, 2);
-    const targetFile = destinationFolder + '/' + this.tagsMapCacheFilename;
-    this.electronService.fs.writeFile(targetFile, serializedMap, null, () => {
-      console.log('TagsStatus map saved.');
-    });
+  saveTagsStatus(): void {
+    const serializedMap = JSON.stringify(
+      Array.from(this.tagsStatus.entries()), mapAndSetReplacer, 2);
+    this.electronService.fs.writeFile(
+      this.absTagsStatusStorageFile, serializedMap, null, (err) => {
+        if (err) throw err;
+        console.log('TagsStatus map saved.');
+      });
   }
 }
