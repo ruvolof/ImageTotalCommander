@@ -20,13 +20,13 @@ export interface WebkitFileInterface {
   styleUrls: ['./gallery.component.scss']
 })
 export class GalleryComponent implements OnInit {
-  public tagsStatus: Map<string,TagSetInterface>;
-  public availableTags: Set<string>;
-  public selectedTags: Set<string>;
-  public selectedFolderPath = '';
-  public imagesPaths: string[] = [];
-  public isSliderVisible = false;
-  public isGridVisible = true;
+  tagsStatus: Map<string,TagSetInterface>;
+  availableTags: Set<string>;
+  selectedTags: Set<string>;
+  selectedFolderPath = '';
+  imagesPaths: string[] = [];
+  isSliderVisible = false;
+  isGridVisible = true;
 
   private _imagesArray: WebkitFileInterface[] = [];
   get imagesArray(): WebkitFileInterface[] {return this._imagesArray;}
@@ -54,7 +54,7 @@ export class GalleryComponent implements OnInit {
     return this.selectedImageIndex !== -1;
   }
 
-  public onAddTag(tag: string): void {
+  onAddTag(tag: string): void {
     if (this.isImageSelected()) {
       this.tagsService.addTag(
         tag, this.imagesArray[this.selectedImageIndex].path);
@@ -62,24 +62,24 @@ export class GalleryComponent implements OnInit {
     this.updateTagView();
   }
 
-  public onCloseSlider(): void {
+  onCloseSlider(): void {
     this.selectedImageIndex = -1;
     this.updateMainView();
     this.updateTagView();
   }
 
-  public onPictureSelected(index: number): void {
+  onPictureSelected(index: number): void {
     this.selectedImageIndex = index;
     this.updateMainView();
     this.updateTagView();
   }
 
-  public onSelectedFolder(selectedFolder: SelectedFolderInterface): void {
+  onSelectedFolder(selectedFolder: SelectedFolderInterface): void {
     this.imagesArray = selectedFolder.files;
     this.selectedFolderPath = selectedFolder.absolutePath;
   }
 
-  public onToggleTag(tag: string): void {
+  onToggleTag(tag: string): void {
     if (this.isImageSelected()) {
       this.tagsService.toggleTag(
         tag, this.imagesArray[this.selectedImageIndex].path);
