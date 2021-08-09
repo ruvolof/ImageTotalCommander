@@ -24,10 +24,7 @@ describe('GallerySliderComponent', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
     spyOn(component.selectedImageIndexChange, 'emit');
-    component.imagesArray = [
-      new File([""], "1.jpg", {type: 'image/jpg'}),
-      new File([""], "2.jpg", {type: 'image/jpg'}),
-    ];
+    component.imagesPaths = ['/abs/path/1.jpg', '/abs/path/2.jpg'];
     component.selectedImageIndex = 0;
     fixture.detectChanges();
   });
