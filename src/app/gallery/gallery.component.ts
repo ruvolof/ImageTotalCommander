@@ -20,6 +20,9 @@ export interface WebkitFileInterface {
   styleUrls: ['./gallery.component.scss']
 })
 export class GalleryComponent implements OnInit {
+  public tagsStatus: Map<string,TagSetInterface>;
+  public availableTags: Set<string>;
+  public selectedTags: Set<string>;
   public selectedFolderPath = '';
   public imagesArray: WebkitFileInterface[] = [];
   public isSliderVisible = false;
@@ -32,16 +35,12 @@ export class GalleryComponent implements OnInit {
     this.updateTagView();
   }
 
-  tagsStatus: Map<string,TagSetInterface>;
-  availableTags: Set<string>;
-  selectedTags: Set<string>;
-
   constructor(private readonly tagsService: TagsService) { }
 
   ngOnInit(): void {
     this.tagsStatus = this.tagsService.tagsStatus;
-    this.availableTags = new Set<string>();
     this.selectedTags = new Set<string>();
+    this.updateTagView();
   }
 
   isImageSelected(): boolean {

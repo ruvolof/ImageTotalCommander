@@ -59,10 +59,14 @@ describe('GalleryComponent', () => {
   });
 
   it('initializes the component', () => {
+    spyOn(component, 'updateTagView');
+    component.ngOnInit();
+    
     expect(component.selectedImageIndex).toEqual(-1);
     expect(component.imagesArray).toEqual([]);
     expect(component.isSliderVisible).toBeFalse();
     expect(component.isGridVisible).toBeTrue();
+    expect(component.updateTagView).toHaveBeenCalledOnceWith();
   });
 
   it('initializes the view', () => {
