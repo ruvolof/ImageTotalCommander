@@ -24,7 +24,7 @@ export class GalleryComponent implements OnInit {
   availableTags: Set<string>;
   selectedTags: Set<string>;
   selectedFolderPath = '';
-  imagesPaths: string[] = [];
+  imagesPaths = new Set<string>();
   isSliderVisible = false;
   isGridVisible = true;
 
@@ -32,7 +32,7 @@ export class GalleryComponent implements OnInit {
   get imagesArray(): WebkitFileInterface[] {return this._imagesArray;}
   set imagesArray(newImagesArray: WebkitFileInterface[]) {
     this._imagesArray = newImagesArray;
-    this.imagesPaths = this.imagesArray.map(file => file.path);
+    this.imagesPaths = new Set(this.imagesArray.map(file => file.path));
   }
 
   private _selectedImageIndex = -1;
@@ -83,6 +83,8 @@ export class GalleryComponent implements OnInit {
     if (this.isImageSelected()) {
       this.tagsService.toggleTag(
         tag, this.imagesArray[this.selectedImageIndex].path);
+    } else {
+      this.imagesPaths = this.tagsStatus.get(tag).filenames;
     }
     this.updateTagView();
   }
@@ -98,7 +100,7 @@ export class GalleryComponent implements OnInit {
       this.selectedTags = new Set(
         Array.from(this.tagsStatus).map(([key, value]) => {
           if(value.filenames.has(
-            this.imagesArray[this.selectedImageIndex].path)) {
+            this.imagesPaths[this.selectedImageIndex])) {
             return  key;
           } else {
             return;
