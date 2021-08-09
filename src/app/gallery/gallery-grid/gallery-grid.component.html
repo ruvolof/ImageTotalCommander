@@ -1,8 +1,8 @@
 <div class="gallery-grid">
   <mat-grid-list cols="4" rowHeight="1:1">
-    <mat-grid-tile *ngFor="let image of imagesArray; let i = index">
+    <mat-grid-tile *ngFor="let imagePath of imagesPaths; let i = index">
       <div>
-        <img [src]="'file://' + image.path"
+        <img [src]="'file://' + imagePath"
              class="grid-image"
              (click)="selectPicture(i)">
       </div>

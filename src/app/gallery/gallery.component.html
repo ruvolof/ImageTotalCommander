@@ -14,6 +14,6 @@
 </app-gallery-slider>
 <app-gallery-grid *ngIf="isGridVisible"
                   id="gallery-grid"
-                  [imagesArray]="imagesArray"
+                  [imagesPaths]="imagesPaths"
                   (pictureSelected)="onPictureSelected($event)">
 </app-gallery-grid>

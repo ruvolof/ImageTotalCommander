@@ -24,9 +24,16 @@ export class GalleryComponent implements OnInit {
   public availableTags: Set<string>;
   public selectedTags: Set<string>;
   public selectedFolderPath = '';
-  public imagesArray: WebkitFileInterface[] = [];
+  public imagesPaths: string[] = [];
   public isSliderVisible = false;
   public isGridVisible = true;
+
+  private _imagesArray: WebkitFileInterface[] = [];
+  get imagesArray(): WebkitFileInterface[] {return this._imagesArray;}
+  set imagesArray(newImagesArray: WebkitFileInterface[]) {
+    this._imagesArray = newImagesArray;
+    this.imagesPaths = this.imagesArray.map(file => file.path);
+  }
 
   private _selectedImageIndex = -1;
   get selectedImageIndex(): number {return this._selectedImageIndex;}

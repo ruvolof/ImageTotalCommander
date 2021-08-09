@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {WebkitFileInterface} from '../gallery.component';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -10,7 +9,7 @@ export class GalleryGridComponent implements OnInit {
   // Emits the index of the selected picture in the array.
   @Output() pictureSelected = new EventEmitter();
 
-  @Input() imagesArray!: WebkitFileInterface[];
+  @Input() imagesPaths!: string[];
 
   constructor() { }
 
