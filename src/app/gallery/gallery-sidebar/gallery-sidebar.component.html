@@ -40,7 +40,7 @@
     <ng-container *ngFor="let tag of availableTags">
       <mat-checkbox [checked]="selectedTags.has(tag)"
                     [value]="tag"
-                    (change)="onTagCheckboxChange($event.source.value)">
+                    (change)="onTagCheckboxChange($event)">
         {{tag}}
       </mat-checkbox>
     </ng-container>

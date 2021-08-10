@@ -82,6 +82,6 @@ describe('GallerySidebarComponent', () => {
     const tagCheckbox = await loader.getHarness(MatCheckboxHarness);
     await tagCheckbox.toggle();
 
-    expect(component.toggleTag.emit).toHaveBeenCalledOnceWith('existing_tag');
+    expect(component.toggleTag.emit).toHaveBeenCalledTimes(1);
   });
 });

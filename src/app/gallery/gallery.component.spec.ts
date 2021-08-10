@@ -11,6 +11,7 @@ import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
 import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.component';
 import {GallerySliderComponent} from './gallery-slider/gallery-slider.component';
 import {GalleryModule} from './gallery.module';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 export function makeWebkitFileInterface(fileId: string): WebkitFileInterface {
   return {
@@ -217,7 +218,10 @@ describe('GalleryComponent', () => {
 
     it('adds a tag to the currently selected image', () => {
       component.selectedImageIndex = 1;
-      gallerySidebar.triggerEventHandler('toggleTag', 'test_tag');
+      gallerySidebar.triggerEventHandler('toggleTag', {
+        checked: true,
+        source: {value: 'test_tag'}
+      });
       fixture.detectChanges();
 
       expect(component.updateTagView).toHaveBeenCalled();
@@ -228,7 +232,10 @@ describe('GalleryComponent', () => {
 
     it('removes a tag to the currently selected image', () => {
       component.selectedImageIndex = 0;
-      gallerySidebar.triggerEventHandler('toggleTag', 'test_tag');
+      gallerySidebar.triggerEventHandler('toggleTag', {
+        checked: false,
+        source: {value: 'test_tag'}
+      });
       fixture.detectChanges();
 
       expect(component.updateTagView).toHaveBeenCalled();

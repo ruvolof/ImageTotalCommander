@@ -1,4 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+
 import {WebkitFileInterface, SelectedFolderInterface} from '../gallery.component';
 
 @Component({
@@ -14,7 +16,7 @@ export class GallerySidebarComponent implements OnInit {
   // Emits when the add tag button is clicked
   @Output() addTag = new EventEmitter();
   // Emits when a checkbox with a tag is clicked
-  @Output() toggleTag = new EventEmitter();
+  @Output() toggleTag = new EventEmitter<MatCheckboxChange>();
 
   @Input() isSliderVisible!: boolean;
   @Input() availableTags!: Set<string>;
@@ -68,7 +70,7 @@ export class GallerySidebarComponent implements OnInit {
     }
   }
 
-  public onTagCheckboxChange(tag: string): void {
-    this.toggleTag.emit(tag);
+  public onTagCheckboxChange(event: MatCheckboxChange): void {
+    this.toggleTag.emit(event);
   }
 }

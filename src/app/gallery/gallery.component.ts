@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import {TagSetInterface, TagsService} from '../core/services/tags/tags.service';
 
@@ -78,14 +79,18 @@ export class GalleryComponent implements OnInit {
   onSelectedFolder(selectedFolder: SelectedFolderInterface): void {
     this.imagesArray = selectedFolder.files;
     this.selectedFolderPath = selectedFolder.absolutePath;
+    this.updateTagView();
   }
 
-  onToggleTag(tag: string): void {
+  onToggleTag(event: MatCheckboxChange): void {
+    const tagName = event.source.value;
     if (this.isImageSelected()) {
       this.tagsService.toggleTag(
-        tag, this.imagesArray[this.selectedImageIndex].path);
+        tagName, this.imagesPaths[this.selectedImageIndex]);
     } else {
-      this.imagesPaths = Array.from(this.tagsStatus.get(tag).filenames).sort();
+      if (event.checked) {
+        this.imagesPaths = Array.from(this.tagsStatus.get(tagName).filenames).sort();
+      }
     }
     this.updateTagView();
   }
@@ -110,6 +115,7 @@ export class GalleryComponent implements OnInit {
       );
     }
     else {
+      console.log('clearing');
       this.selectedTags.clear();
     }
   }
