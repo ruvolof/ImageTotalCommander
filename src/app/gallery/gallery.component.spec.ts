@@ -64,7 +64,7 @@ describe('GalleryComponent', () => {
     
     expect(component.selectedImageIndex).toEqual(-1);
     expect(component.imagesArray).toEqual([]);
-    expect(component.imagesPaths).toEqual(new Set<string>());
+    expect(component.imagesPaths).toEqual([]);
     expect(component.isSliderVisible).toBeFalse();
     expect(component.isGridVisible).toBeTrue();
     expect(component.updateTagView).toHaveBeenCalledOnceWith();
@@ -86,8 +86,7 @@ describe('GalleryComponent', () => {
 
     expect(component.imagesArray).toEqual([makeWebkitFileInterface('1')]);
     expect(component.selectedFolderPath).toEqual('/abs/path');
-    expect(component.imagesPaths).toEqual(
-      new Set<string>().add('/abs/path/1.jpg'));
+    expect(component.imagesPaths).toEqual(['/abs/path/1.jpg']);
   });
 
   it('opens the slider when an image is selected on the grid', () => {
