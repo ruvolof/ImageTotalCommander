@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatRadioChange } from '@angular/material/radio';
 
 import {TagSetInterface, TagsService} from '../core/services/tags/tags.service';
 
@@ -30,93 +31,44 @@ export class GalleryComponent implements OnInit {
   isGridVisible = true;
 
   private _imagesArray: WebkitFileInterface[] = [];
+  private _selectedImageIndex = -1;
+
+  constructor(private readonly tagsService: TagsService) { }
+
   get imagesArray(): WebkitFileInterface[] {return this._imagesArray;}
   set imagesArray(newImagesArray: WebkitFileInterface[]) {
     this._imagesArray = newImagesArray;
     this.imagesPaths = Array.from(
-      new Set(this.imagesArray.map(file => file.path))).sort();
+      new Set(this._imagesArray.map(file => file.path))).sort();
   }
 
-  private _selectedImageIndex = -1;
   get selectedImageIndex(): number {return this._selectedImageIndex;}
   set selectedImageIndex(newValue: number) {
     this._selectedImageIndex = newValue;
-    this.updateTagView();
+    this.updateMainView();
   }
-
-  constructor(private readonly tagsService: TagsService) { }
 
   ngOnInit(): void {
     this.tagsStatus = this.tagsService.tagsStatus;
     this.selectedTags = new Set<string>();
-    this.updateTagView();
-  }
-
-  isImageSelected(): boolean {
-    return this.selectedImageIndex !== -1;
-  }
-
-  onAddTag(tag: string): void {
-    if (this.isImageSelected()) {
-      this.tagsService.addTag(
-        tag, this.imagesArray[this.selectedImageIndex].path);
-    }
-    this.updateTagView();
-  }
-
-  onCloseSlider(): void {
-    this.selectedImageIndex = -1;
-    this.updateMainView();
-    this.updateTagView();
   }
 
   onPictureSelected(index: number): void {
     this.selectedImageIndex = index;
-    this.updateMainView();
-    this.updateTagView();
   }
 
   onSelectedFolder(selectedFolder: SelectedFolderInterface): void {
     this.imagesArray = selectedFolder.files;
     this.selectedFolderPath = selectedFolder.absolutePath;
-    this.updateTagView();
   }
 
-  onToggleTag(event: MatCheckboxChange): void {
-    const tagName = event.source.value;
-    if (this.isImageSelected()) {
-      this.tagsService.toggleTag(
-        tagName, this.imagesPaths[this.selectedImageIndex]);
-    } else {
-      if (event.checked) {
-        this.imagesPaths = Array.from(this.tagsStatus.get(tagName).filenames).sort();
-      }
-    }
-    this.updateTagView();
+  onTagSelected(tagName: string): void {
+    this.imagesPaths = 
+      Array.from(this.tagsStatus.get(tagName).filenames).sort();
   }
 
   updateMainView(): void {
     this.isSliderVisible = this.selectedImageIndex !== -1;
     this.isGridVisible = !this.isSliderVisible;    
-  }
-
-  updateTagView(): void {
-    this.availableTags = new Set(this.tagsStatus.keys());
-    if (this.isImageSelected()) {
-      this.selectedTags = new Set(
-        Array.from(this.tagsStatus).map(([key, value]) => {
-          if(value.filenames.has(
-            this.imagesPaths[this.selectedImageIndex])) {
-            return  key;
-          } else {
-            return;
-          }
-        })
-      );
-    }
-    else {
-      console.log('clearing');
-      this.selectedTags.clear();
-    }
   }
 }

@@ -34,15 +34,27 @@
        class="break-word">
     Showing: {{selectedFolderPath}}
   </div>
-  <div *ngIf="availableTags.size > 0"
+  <div *ngIf="availableTags.length > 0"
        class="gallery-sidebar-widget">
     <div>Tags</div>
-    <ng-container *ngFor="let tag of availableTags">
-      <mat-checkbox [checked]="selectedTags.has(tag)"
-                    [value]="tag"
-                    (change)="onTagCheckboxChange($event)">
-        {{tag}}
-      </mat-checkbox>
+    <ng-container *ngIf="isSliderVisible">
+      <ng-container *ngFor="let tag of availableTags">
+        <mat-checkbox [checked]="selectedTags.has(tag)"
+                      [value]="tag"
+                      (change)="onTagCheckboxChange($event)">
+          {{tag}}
+        </mat-checkbox>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!isSliderVisible">
+      <mat-radio-group aria-label="Select an option">
+        <ng-container *ngFor="let tag of availableTags">
+            <mat-radio-button [value]="tag"
+                              (change)="onTagRadioChange($event)">
+              {{tag}}
+            </mat-radio-button>
+        </ng-container>
+      </mat-radio-group>
     </ng-container>
   </div>
 </div>

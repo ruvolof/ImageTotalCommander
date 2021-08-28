@@ -11,7 +11,6 @@ import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
 import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.component';
 import {GallerySliderComponent} from './gallery-slider/gallery-slider.component';
 import {GalleryModule} from './gallery.module';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 
 export function makeWebkitFileInterface(fileId: string): WebkitFileInterface {
   return {
@@ -60,7 +59,6 @@ describe('GalleryComponent', () => {
   });
 
   it('initializes the component', () => {
-    spyOn(component, 'updateTagView');
     component.ngOnInit();
     
     expect(component.selectedImageIndex).toEqual(-1);
@@ -68,7 +66,6 @@ describe('GalleryComponent', () => {
     expect(component.imagesPaths).toEqual([]);
     expect(component.isSliderVisible).toBeFalse();
     expect(component.isGridVisible).toBeTrue();
-    expect(component.updateTagView).toHaveBeenCalledOnceWith();
   });
 
   it('initializes the view', () => {
@@ -102,144 +99,5 @@ describe('GalleryComponent', () => {
     expect(component.isSliderVisible).toBeTrue();
     expect(fixture.debugElement.query(
       By.directive(GallerySliderComponent))).toBeDefined();
-  });
-
-  it('closes the slider when the sidebar emits closeSlide', () => {
-    component.imagesArray = [makeWebkitFileInterface('1')];
-    galleryGrid.triggerEventHandler('pictureSelected', 0);
-    fixture.detectChanges();
-
-    expect(component.isGridVisible).toBeFalse();
-    expect(component.isSliderVisible).toBeTrue();
-    expect(fixture.debugElement.query(
-      By.directive(GalleryGridComponent))).toBeNull();
-    expect(fixture.debugElement.query(
-      By.directive(GallerySliderComponent))).toBeDefined();
-    
-    
-    gallerySidebar.triggerEventHandler('closeSlider', null);
-    fixture.detectChanges();
-
-    expect(component.selectedImageIndex).toEqual(-1);
-    expect(component.isGridVisible).toBeTrue();
-    expect(component.isSliderVisible).toBeFalse();
-    expect(fixture.debugElement.query(
-      By.directive(GalleryGridComponent))).toBeDefined();
-    expect(fixture.debugElement.query(
-      By.directive(GallerySliderComponent))).toBeNull();
-  });
-
-  it('updates tag view when selected image index changes', () => {
-    spyOn(component, 'updateTagView').and.callFake(() => {});
-    component.selectedImageIndex = 5;
-
-    expect(component.updateTagView).toHaveBeenCalledOnceWith();
-  });
-
-  describe('onAddTag', () => {
-    beforeEach(() => {
-      component.imagesArray = [
-        makeWebkitFileInterface('1'),
-        makeWebkitFileInterface('2'),
-      ];
-
-      spyOn(component, 'updateTagView').and.callThrough();
-    });
-
-    it('does nothing when no picture is selected', () => {
-      spyOn(component, 'onAddTag');
-      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
-      
-      expect(component.tagsStatus).toEqual(new Map<string, TagSetInterface>());
-    });
-
-    it('adds a new set when the tag is new', () => {
-      galleryGrid.triggerEventHandler('pictureSelected', 0);
-      fixture.detectChanges();
-      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
-      fixture.detectChanges();
-
-      const expectedTagsStatus = 
-        new Map<string,TagSetInterface>().set(
-          'new_tag', {filenames: new Set<string>().add('/abs/path/1.jpg')});
-
-      expect(component.updateTagView).toHaveBeenCalled();
-      expect(component.tagsStatus).toEqual(expectedTagsStatus);
-    });
-
-    it('adds a filename to a pre existing tag set', () => {
-      galleryGrid.triggerEventHandler('pictureSelected', 0);
-      fixture.detectChanges();
-      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
-      fixture.detectChanges();
-      component.selectedImageIndex = 1;
-      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
-      fixture.detectChanges();
-
-      const expectedTagsStatus = 
-        new Map<string,TagSetInterface>().set(
-          'new_tag', {
-            filenames: 
-              new Set<string>().add('/abs/path/1.jpg').add('/abs/path/2.jpg')
-          });
-
-      expect(component.updateTagView).toHaveBeenCalled();
-      expect(component.tagsStatus).toEqual(expectedTagsStatus);
-    });
-
-    it('does not add the same filename twice to the same tag set', () => {
-      galleryGrid.triggerEventHandler('pictureSelected', 0);
-      fixture.detectChanges();
-      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
-      fixture.detectChanges();
-      gallerySidebar.triggerEventHandler('addTag', 'new_tag');
-      fixture.detectChanges();
-
-      const expectedTagsStatus = 
-        new Map<string,TagSetInterface>().set(
-          'new_tag', {filenames: new Set<string>().add('/abs/path/1.jpg')});
-
-      expect(component.updateTagView).toHaveBeenCalled();
-      expect(component.tagsStatus).toEqual(expectedTagsStatus);
-    });
-  });
-
-  describe('onToggleTag', () => {
-    beforeEach(() => {
-      component.imagesArray = [
-        makeWebkitFileInterface('1'),
-        makeWebkitFileInterface('2'),
-      ];
-      component.tagsStatus.set(
-        'test_tag', {filenames: new Set<string>().add('/abs/path/1.jpg')});
-
-      spyOn(component, 'updateTagView').and.callThrough();
-    });
-
-    it('adds a tag to the currently selected image', () => {
-      component.selectedImageIndex = 1;
-      gallerySidebar.triggerEventHandler('toggleTag', {
-        checked: true,
-        source: {value: 'test_tag'}
-      });
-      fixture.detectChanges();
-
-      expect(component.updateTagView).toHaveBeenCalled();
-      expect(component.tagsStatus.get('test_tag')).toEqual({
-        filenames: 
-          new Set<string>().add('/abs/path/1.jpg').add('/abs/path/2.jpg')});
-    });
-
-    it('removes a tag to the currently selected image', () => {
-      component.selectedImageIndex = 0;
-      gallerySidebar.triggerEventHandler('toggleTag', {
-        checked: false,
-        source: {value: 'test_tag'}
-      });
-      fixture.detectChanges();
-
-      expect(component.updateTagView).toHaveBeenCalled();
-      expect(component.tagsStatus.get('test_tag')).toBeUndefined();
-    });
   });
 });

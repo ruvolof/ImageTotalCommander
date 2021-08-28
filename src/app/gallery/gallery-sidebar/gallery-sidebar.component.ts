@@ -1,5 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatCheckboxChange} from '@angular/material/checkbox';
+import {MatRadioChange} from '@angular/material/radio';
+
+import {TagsService} from '../../core/services/tags/tags.service';
 
 import {WebkitFileInterface, SelectedFolderInterface} from '../gallery.component';
 
@@ -8,29 +11,46 @@ import {WebkitFileInterface, SelectedFolderInterface} from '../gallery.component
   templateUrl: './gallery-sidebar.component.html',
   styleUrls: ['./gallery-sidebar.component.scss']
 })
-export class GallerySidebarComponent implements OnInit {
-  // Emits a SelectedFolderInterface.
-  @Output() selectedFolder = new EventEmitter();
-  // Emits when the button to close the slider is clicked.
-  @Output() closeSlider = new EventEmitter();
-  // Emits when the add tag button is clicked
-  @Output() addTag = new EventEmitter();
-  // Emits when a checkbox with a tag is clicked
-  @Output() toggleTag = new EventEmitter<MatCheckboxChange>();
-
+export class GallerySidebarComponent {
+  @Input() selectedImageIndex!: number;
   @Input() isSliderVisible!: boolean;
-  @Input() availableTags!: Set<string>;
-  @Input() selectedTags!: Set<string>;
+  @Input() imagesPaths!: string[];
+  @Output() selectedFolder = new EventEmitter<SelectedFolderInterface>();
+  @Output() tagSelected = new EventEmitter<string>();
+  @Output() selectedImageIndexChange = new EventEmitter<number>();
 
   newTag = '';
   selectedFolderPath = '';
 
-  constructor() { }
+  constructor(private readonly tagsService: TagsService) { }
 
-  ngOnInit(): void { }
+  get availableTags(): string[] {
+    return Array.from(this.tagsService.tagsStatus.keys());
+  }
+
+  get selectedTags(): Set<string> {
+    return new Set(
+      Array.from(this.tagsService.tagsStatus).map(([key, value]) => {
+        if(value.filenames.has(
+          this.imagesPaths[this.selectedImageIndex])) {
+          return  key;
+        } else {
+          return;
+        }
+      })
+    );
+  }
+
+  public onAddTagClick(): void {
+    if (this.newTag) {
+      this.tagsService.addTag(
+        this.newTag, this.imagesPaths[this.selectedImageIndex]);
+    }
+  }
 
   public onCloseSliderClick(): void {
-    this.closeSlider.emit();
+    this.selectedImageIndex = -1;
+    this.selectedImageIndexChange.emit(this.selectedImageIndex);
   }
 
   public onDirectorySelected(fileList: FileList): void {
@@ -64,13 +84,12 @@ export class GallerySidebarComponent implements OnInit {
     }
   }
 
-  public onAddTagClick(): void {
-    if (this.newTag) {
-      this.addTag.emit(this.newTag);
-    }
+  public onTagCheckboxChange(event: MatCheckboxChange): void {
+    this.tagsService.toggleTag(
+      event.source.value, this.imagesPaths[this.selectedImageIndex]);
   }
 
-  public onTagCheckboxChange(event: MatCheckboxChange): void {
-    this.toggleTag.emit(event);
+  public onTagRadioChange(event: MatRadioChange): void {
+    this.tagSelected.emit(event.value);
   }
 }

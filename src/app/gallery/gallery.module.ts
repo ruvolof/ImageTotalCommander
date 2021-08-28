@@ -6,7 +6,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input'; 
+import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio'; 
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -37,6 +38,7 @@ import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.compone
     MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatRadioModule,
     CoreModule,
     GalleryRoutingModule,
   ],
