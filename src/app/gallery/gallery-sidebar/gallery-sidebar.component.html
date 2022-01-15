@@ -27,8 +27,8 @@
   </div>
   <div class="gallery-sidebar-widget">
     <input type="file" 
-           webkitdirectory
-           (change)="onDirectorySelected($event.target.files)">
+           webkitdirectory="true"
+           (change)="onDirectorySelected(assertEventTarget($event.target))">
   </div>
   <div *ngIf="selectedFolderPath"
        class="break-word">

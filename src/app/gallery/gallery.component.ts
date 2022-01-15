@@ -22,9 +22,9 @@ export interface WebkitFileInterface {
   styleUrls: ['./gallery.component.scss']
 })
 export class GalleryComponent implements OnInit {
-  tagsStatus: Map<string,TagSetInterface>;
-  availableTags: Set<string>;
-  selectedTags: Set<string>;
+  tagsStatus!: Map<string,TagSetInterface>;
+  availableTags!: Set<string>;
+  selectedTags!: Set<string>;
   selectedFolderPath = '';
   imagesPaths: string[] = [];
   isSliderVisible = false;
@@ -64,7 +64,7 @@ export class GalleryComponent implements OnInit {
 
   onTagSelected(tagName: string): void {
     this.imagesPaths = 
-      Array.from(this.tagsStatus.get(tagName).filenames).sort();
+      Array.from(this.tagsStatus.get(tagName)!.filenames).sort();
   }
 
   updateMainView(): void {

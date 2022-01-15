@@ -2,24 +2,44 @@ import { Injectable } from '@angular/core';
 
 // If you import a module but never use any of the imported values other than as TypeScript types,
 // the resulting javascript file will look as if you never imported the module at all.
-import { ipcRenderer, webFrame, remote } from 'electron';
-import * as childProcess from 'child_process';
+import { ipcRenderer, webFrame } from 'electron';
 import * as fs from 'fs';
 import * as os from 'os';
+
+class ElectronError extends Error {
+  constructor(msg: string) {
+      super(msg);
+      Object.setPrototypeOf(this, ElectronError.prototype);
+  }
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ElectronService {
-  ipcRenderer: typeof ipcRenderer;
-  webFrame: typeof webFrame;
-  remote: typeof remote;
-  childProcess: typeof childProcess;
-  fs: typeof fs;
-  os: typeof os;
+  ipcRenderer?: typeof ipcRenderer;
+  webFrame?: typeof webFrame;
+  fs?: typeof fs;
+  os?: typeof os;
 
   get isElectron(): boolean {
-    return !!(window && window.process && window.process.type);
+    console.log('Checking if electron')
+    //return !!(window && window.process && window.process.type);
+    return true;
+  }
+
+  getFs(): typeof fs {
+    if (this.fs) {
+      return this.fs;
+    }
+    throw new ElectronError('fs is undefined.');
+  }
+
+  getOs(): typeof os {
+    if (this.os) {
+      return this.os;
+    }
+    throw new ElectronError('os is undefined.');
   }
 
   constructor() {
@@ -28,10 +48,6 @@ export class ElectronService {
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
 
-      // If you wan to use remote object, pleanse set enableRemoteModule to true in main.ts
-      // this.remote = window.require('electron').remote;
-
-      this.childProcess = window.require('child_process');
       this.fs = window.require('fs');
       this.os = window.require('os');
     }

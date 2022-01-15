@@ -57,20 +57,20 @@ export class TagsService {
   constructor(private readonly electronService: ElectronService) {
     this.tagsStatus = new Map<string,TagSetInterface>();
     this.absLocalStorageFolder = 
-      this.electronService.os.homedir() + localStorageFolderPath;
+      this.electronService.getOs().homedir() + localStorageFolderPath;
     this.absTagsStatusStorageFile = 
       this.absLocalStorageFolder + localTagsStatusFilePath;
     this.initializeTagsService();
   }
 
   private initializeTagsService() {
-    this.electronService.fs.mkdir(
+    this.electronService.getFs().mkdir(
       this.absLocalStorageFolder, { recursive: true }, (err) => {
         if (err) throw err;
         console.log('Initial storage folder created.');
       });
-    if (this.electronService.fs.existsSync(this.absTagsStatusStorageFile)) {
-      const serializedString = this.electronService.fs.readFileSync(
+    if (this.electronService.getFs().existsSync(this.absTagsStatusStorageFile)) {
+      const serializedString = this.electronService.getFs().readFileSync(
         this.absTagsStatusStorageFile, 'utf8');
       this.tagsStatus = 
         new Map(JSON.parse(serializedString, mapAndSetReviver));
@@ -90,7 +90,7 @@ export class TagsService {
   }
 
   public toggleTag(tag: string, filename: string): void {
-    const tagSetInterface = this.tagsStatus.get(tag);
+    const tagSetInterface = this.tagsStatus.get(tag) as TagSetInterface;
     if (tagSetInterface.filenames.has(filename)) {
       tagSetInterface.filenames.delete(filename);
       if (tagSetInterface.filenames.size == 0) {
@@ -105,7 +105,7 @@ export class TagsService {
   saveTagsStatus(): void {
     const serializedMap = JSON.stringify(
       Array.from(this.tagsStatus.entries()), mapAndSetReplacer, 2);
-    this.electronService.fs.writeFile(
+    this.electronService.getFs().writeFile(
       this.absTagsStatusStorageFile, serializedMap, null, (err) => {
         if (err) throw err;
         console.log('TagsStatus map saved.');
