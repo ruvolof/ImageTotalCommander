@@ -6,7 +6,7 @@ import {MatButtonHarness} from '@angular/material/button/testing';
 
 import {GalleryModule} from '../gallery.module';
 import {GallerySidebarComponent} from './gallery-sidebar.component';
-import {TagsService} from '../../core/services/tags/tags.service';
+import {TagSetInterface, TagsService} from '../../core/services/tags/tags.service';
 import {SelectedFolderInterface} from '../gallery.component';
 
 
@@ -17,7 +17,8 @@ describe('GallerySidebarComponent', () => {
   let fakeTagsService: TagsService;
 
   beforeEach(async () => {
-    
+    fakeTagsService = jasmine.createSpyObj('TagsService', ['tagsStatus']);
+    fakeTagsService.tagsStatus = new Map<string, TagSetInterface>();
     await TestBed.configureTestingModule({
       imports: [GalleryModule],
       declarations: [GallerySidebarComponent],
