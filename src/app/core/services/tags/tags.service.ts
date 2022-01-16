@@ -103,12 +103,17 @@ export class TagsService {
   }
 
   saveTagsStatus(): void {
-    const serializedMap = JSON.stringify(
-      Array.from(this.tagsStatus.entries()), mapAndSetReplacer, 2);
-    this.electronService.getFs().writeFile(
-      this.absTagsStatusStorageFile, serializedMap, null, (err) => {
+    const backupFile = `${this.absTagsStatusStorageFile}_${Date.now()}`;
+    this.electronService.getFs().copyFile(
+      this.absTagsStatusStorageFile, backupFile, 0, (err) => {
         if (err) throw err;
-        console.log('TagsStatus map saved.');
+        const serializedMap = JSON.stringify(
+          Array.from(this.tagsStatus.entries()), mapAndSetReplacer, 2);
+        this.electronService.getFs().writeFile(
+          this.absTagsStatusStorageFile, serializedMap, null, (err) => {
+            if (err) throw err;
+            console.log('TagsStatus map saved.');
+          });
       });
   }
 }

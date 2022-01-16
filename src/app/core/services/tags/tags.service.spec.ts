@@ -3,23 +3,40 @@ import {TestBed} from '@angular/core/testing';
 import {ElectronService, FileSystemInterface, OperativeSystemInterface} from '../electron/electron.service';
 import {TagsService, TagSetInterface, mapAndSetReplacer, mapAndSetReviver} from './tags.service';
 
+class FakeElectronService extends ElectronService {
+  fakeOs: OperativeSystemInterface = {
+    homedir: () => '/home/user',
+  }
+  
+  fakeFs: FileSystemInterface = {
+    copyFile: (src, dest, mode, callback) => {
+      callback(null);
+    },
+    existsSync: (path) => true,
+    mkdir: (part, options, callback) => {
+      callback(null);
+    },
+    readFileSync: (path, encoding) => '[]',
+    writeFile: (path, data, options, callback) => {
+      callback(null);
+    },
+  }
+
+  override getOs(): OperativeSystemInterface {
+      return this.fakeOs;
+  }
+
+  override getFs(): FileSystemInterface {
+      return this.fakeFs;
+  }
+}
+
 describe('TagsService', () => {
-  let fakeElectronService: ElectronService;
+  let fakeElectronService: FakeElectronService;
   let service: TagsService;
 
   beforeEach(() => {
-    const fakeOs: OperativeSystemInterface = {
-      homedir: () => '/home/user',
-    }
-    const fakeFs: FileSystemInterface = {
-      existsSync: (path) => true,
-      mkdir: (part, options, callback) => null,
-      readFileSync: (path, encoding) => '[]',
-      writeFile: (path, data, options, callback) => null,
-    }
-    fakeElectronService = jasmine.createSpyObj('ElectronService', ['getOs', 'getFs']);
-    fakeElectronService.getOs = () => fakeOs;
-    fakeElectronService.getFs = () => fakeFs;
+    const fakeElectronService = new FakeElectronService();
     TestBed.configureTestingModule({
       providers: [
         {provide: ElectronService, useValue: fakeElectronService},

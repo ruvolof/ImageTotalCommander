@@ -3,11 +3,11 @@ import {HarnessLoader} from '@angular/cdk/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
-import { SelectedFolderInterface } from '../gallery.component';
 
 import {GalleryModule} from '../gallery.module';
 import {GallerySidebarComponent} from './gallery-sidebar.component';
 import {TagsService} from '../../core/services/tags/tags.service';
+import {SelectedFolderInterface} from '../gallery.component';
 
 
 describe('GallerySidebarComponent', () => {
@@ -17,6 +17,7 @@ describe('GallerySidebarComponent', () => {
   let fakeTagsService: TagsService;
 
   beforeEach(async () => {
+    
     await TestBed.configureTestingModule({
       imports: [GalleryModule],
       declarations: [GallerySidebarComponent],

@@ -14,13 +14,19 @@ class ElectronError extends Error {
 }
 
 export interface FileSystemInterface {
+  copyFile(src: string,
+           dest: string,
+           mode: number,
+           callback: (err: Error | null) => void): void;
   existsSync(path: string): boolean;
-  mkdir(path: string, options: object, callback: (err: Error) => void): void;
+  mkdir(path: string, 
+        options: object, 
+        callback: (err: Error | null) => void): void;
   readFileSync(path: string, encoding: string): string;
   writeFile(path: string, 
             data: string, 
             options: object | null, 
-            callback: (err: Error) => void): void;
+            callback: (err: Error | null) => void): void;
 }
 
 export interface OperativeSystemInterface {
