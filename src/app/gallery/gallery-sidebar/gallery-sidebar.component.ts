@@ -12,7 +12,6 @@ import {WebkitFileInterface, SelectedFolderInterface} from '../gallery.component
 })
 export class GallerySidebarComponent {
   @Input() selectedImageIndex!: number;
-  @Input() isSliderVisible!: boolean;
   @Input() imagesPaths!: string[];
   @Output() selectedFolder = new EventEmitter<SelectedFolderInterface>();
   @Output() tagSelected = new EventEmitter<string>();
@@ -36,6 +35,10 @@ export class GallerySidebarComponent {
         }
         return false;
       }).map(([key, value]) => key));
+  }
+
+  get isSliderVisible(): boolean {
+    return this.selectedImageIndex !== -1;
   }
 
   public onAddTagClick(): void {
