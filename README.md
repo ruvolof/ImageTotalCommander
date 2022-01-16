@@ -1,6 +1,6 @@
 # ImageTotalCommander
 
-This project was initially built upon (angular-electron)[https://github.com/maximegris/angular-electron].
+This project was initially built upon [angular-electron](https://github.com/maximegris/angular-electron).
 
 ## Development server
 
