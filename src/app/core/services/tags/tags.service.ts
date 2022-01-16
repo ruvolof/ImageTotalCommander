@@ -11,8 +11,8 @@ export interface StringifyInterface {
   value: Array<any>;
 }
 
-type TagsStatus = Map<string,TagSetInterface>;
-type TagsStatusTypes = Map<string,TagSetInterface>|Set<string>|string;
+export type TagsStatus = Map<string,TagSetInterface>;
+type TagsStatusTypes = TagsStatus|Set<string>|string;
 
 export function mapAndSetReplacer(key: string, value: TagsStatusTypes): any {
   if(value instanceof Map) {

@@ -2,15 +2,13 @@
 import {DebugElement} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
-import mock from 'mock-fs';
-
-import {TagSetInterface} from '../core/services/tags/tags.service';
 
 import {GalleryComponent, SelectedFolderInterface, WebkitFileInterface} from './gallery.component';
 import {GalleryGridComponent} from './gallery-grid/gallery-grid.component';
 import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.component';
 import {GallerySliderComponent} from './gallery-slider/gallery-slider.component';
 import {GalleryModule} from './gallery.module';
+import {TagsService, TagSetInterface} from '../core/services/tags/tags.service';
 
 export function makeWebkitFileInterface(fileId: string): WebkitFileInterface {
   return {
@@ -27,18 +25,20 @@ describe('GalleryComponent', () => {
   let galleryGrid: DebugElement;
   let gallerySidebar: DebugElement;
   let gallerySlider: DebugElement;
+  let fakeTagsService: TagsService;
 
   beforeEach(async () => {
-    mock();
+    fakeTagsService = jasmine.createSpyObj('TagsService', ['tagsStatus']);
+    fakeTagsService.tagsStatus = new Map<string,TagSetInterface>();
+    
     await TestBed.configureTestingModule({
       imports: [GalleryModule],
-      declarations: [GalleryComponent]
+      declarations: [GalleryComponent],
+      providers: [
+        {provide: TagsService, useValue: fakeTagsService},
+      ],
     })
       .compileComponents();
-  });
-
-  afterEach(() => {
-    mock.restore;
   });
 
   beforeEach(() => {

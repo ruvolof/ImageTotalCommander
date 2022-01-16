@@ -1,19 +1,31 @@
 import {TestBed} from '@angular/core/testing';
 
-import mock from 'mock-fs';
+import {ElectronService, FileSystemInterface, OperativeSystemInterface} from '../electron/electron.service';
 import {TagsService, TagSetInterface, mapAndSetReplacer, mapAndSetReviver} from './tags.service';
 
 describe('TagsService', () => {
+  let fakeElectronService: ElectronService;
   let service: TagsService;
 
   beforeEach(() => {
-    mock();
-    TestBed.configureTestingModule({});
+    const fakeOs: OperativeSystemInterface = {
+      homedir: () => '/home/user',
+    }
+    const fakeFs: FileSystemInterface = {
+      existsSync: (path) => true,
+      mkdir: (part, options, callback) => null,
+      readFileSync: (path, encoding) => '[]',
+      writeFile: (path, data, options, callback) => null,
+    }
+    fakeElectronService = jasmine.createSpyObj('ElectronService', ['getOs', 'getFs']);
+    fakeElectronService.getOs = () => fakeOs;
+    fakeElectronService.getFs = () => fakeFs;
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: ElectronService, useValue: fakeElectronService},
+      ],
+    });
     service = TestBed.inject(TagsService);
-  });
-
-  afterEach(() => {
-    mock.restore;
   });
 
   it('should be created', () => {
@@ -44,11 +56,11 @@ describe('TagsService', () => {
     service.addTag('tag', 'file_1');
     service.toggleTag('tag', 'file_2');
 
-    expect(service.tagsStatus.get('tag').filenames.has('file_2')).toBeTrue();
+    expect(service.tagsStatus.get('tag')?.filenames.has('file_2')).toBeTrue();
     
     service.toggleTag('tag', 'file_2');
 
-    expect(service.tagsStatus.get('tag').filenames.has('file_2')).toBeFalse();
+    expect(service.tagsStatus.get('tag')?.filenames.has('file_2')).toBeFalse();
   });
 
   it('removes tag when removing last filename entry', () => {

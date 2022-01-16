@@ -13,6 +13,20 @@ class ElectronError extends Error {
   }
 }
 
+export interface FileSystemInterface {
+  existsSync(path: string): boolean;
+  mkdir(path: string, options: object, callback: (err: Error) => void): void;
+  readFileSync(path: string, encoding: string): string;
+  writeFile(path: string, 
+            data: string, 
+            options: object | null, 
+            callback: (err: Error) => void): void;
+}
+
+export interface OperativeSystemInterface {
+  homedir(): string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,21 +37,19 @@ export class ElectronService {
   os?: typeof os;
 
   get isElectron(): boolean {
-    console.log('Checking if electron')
-    //return !!(window && window.process && window.process.type);
-    return true;
+    return !!(window && window.process && window.process.type);
   }
 
-  getFs(): typeof fs {
+  getFs(): FileSystemInterface {
     if (this.fs) {
-      return this.fs;
+      return this.fs as unknown as FileSystemInterface;
     }
     throw new ElectronError('fs is undefined.');
   }
 
-  getOs(): typeof os {
+  getOs(): OperativeSystemInterface {
     if (this.os) {
-      return this.os;
+      return this.os as unknown as OperativeSystemInterface;
     }
     throw new ElectronError('os is undefined.');
   }
