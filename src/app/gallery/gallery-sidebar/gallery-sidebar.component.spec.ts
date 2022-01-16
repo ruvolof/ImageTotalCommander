@@ -12,6 +12,7 @@ import {GallerySidebarComponent} from './gallery-sidebar.component';
 import {TagSetInterface, TagsService, TagsStatus} from '../../core/services/tags/tags.service';
 import {SelectedFolderInterface} from '../gallery.component';
 import { splitAtColon } from '@angular/compiler/src/util';
+import { makeWebkitFileInterface } from '../gallery.component.spec';
 
 describe('GallerySidebarComponent', () => {
   let component: GallerySidebarComponent;
@@ -69,14 +70,31 @@ describe('GallerySidebarComponent', () => {
       .toHaveBeenCalledOnceWith(-1);
   });
 
-  it('emits imagesInFolder after processing images', () => {
-    spyOn(component.selectedFolder, 'emit');
-    component.onDirectorySelected({files: []} as unknown as EventTarget);
+  describe('Folder Selection', () => {
+    beforeEach(() => {
+      spyOn(component.selectedFolder, 'emit');
+    });
 
-    expect(component.selectedFolder.emit).toHaveBeenCalledOnceWith({
-      absolutePath: '',
-      files: []
-    } as SelectedFolderInterface);
+    it('emits imagesInFolder after processing images', () => {
+      component.onDirectorySelected({files: []} as unknown as EventTarget);
+  
+      expect(component.selectedFolder.emit).toHaveBeenCalledOnceWith({
+        absolutePath: '',
+        files: []
+      } as SelectedFolderInterface);
+    });
+
+    it('processes the file list', () => {
+      const file1 = makeWebkitFileInterface('1');
+      const file2 = makeWebkitFileInterface('2');
+      const fileList = [file1, file2];
+      component.onDirectorySelected({files: fileList} as unknown as EventTarget);
+
+      expect(component.selectedFolder.emit).toHaveBeenCalledOnceWith({
+        absolutePath: '/abs/path',
+        files: fileList,
+      } as SelectedFolderInterface);
+    });
   });
 
   describe('Tag Interface', () => {
@@ -129,7 +147,4 @@ describe('GallerySidebarComponent', () => {
       expect(component.tagSelected.emit).toHaveBeenCalledOnceWith('tag1');
     });
   });
-
-  // TODO(ruvolof): add actual tests for the processing of files in the 
-  // selected folder
 });
