@@ -26,9 +26,13 @@
     </button>
   </div>
   <div class="gallery-sidebar-widget">
-    <input type="file" 
-           webkitdirectory="true"
-           (change)="onDirectorySelected(assertEventTarget($event.target))">
+    <label class="select-folder-button-label">
+      <input type="file" 
+             webkitdirectory="true"
+             class="hidden-input"
+             (change)="onDirectorySelected(assertEventTarget($event.target))">
+      Select Folder
+    </label>
   </div>
   <div *ngIf="selectedFolderPath"
        class="break-word">
