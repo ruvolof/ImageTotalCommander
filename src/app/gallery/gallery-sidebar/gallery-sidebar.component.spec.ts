@@ -87,13 +87,19 @@ describe('GallerySidebarComponent', () => {
     it('processes the file list', () => {
       const file1 = makeWebkitFileInterface('1');
       const file2 = makeWebkitFileInterface('2');
-      const fileList = [file1, file2];
-      component.onDirectorySelected({files: fileList} as unknown as EventTarget);
+      const file3 = makeWebkitFileInterface('3', 'text/plain');
+      component.onDirectorySelected(
+        {files: [file1, file2, file3]} as unknown as EventTarget);
 
       expect(component.selectedFolder.emit).toHaveBeenCalledOnceWith({
         absolutePath: '/abs/path',
-        files: fileList,
+        files: [file1, file2],
       } as SelectedFolderInterface);
+    });
+
+    it('handles unexpected inputs', () => {
+      expect(() => component.onDirectorySelected(null)).toThrowError(
+        'Unexpected null value from directory select.')
     });
   });
 

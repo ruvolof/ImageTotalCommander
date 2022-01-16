@@ -10,12 +10,13 @@ import {GallerySliderComponent} from './gallery-slider/gallery-slider.component'
 import {GalleryModule} from './gallery.module';
 import {TagsService, TagSetInterface} from '../core/services/tags/tags.service';
 
-export function makeWebkitFileInterface(fileId: string): WebkitFileInterface {
+export function makeWebkitFileInterface(
+    fileId: string, type='image/jpg'): WebkitFileInterface {
   return {
     name: `${fileId}.jpg`,
     path: `/abs/path/${fileId}.jpg`,
-    type: 'image/jpg',
-    webkitRelativePath: `path/${fileId}.jpg1`
+    type: type,
+    webkitRelativePath: `path/${fileId}.jpg`
   } as WebkitFileInterface;
 }
 

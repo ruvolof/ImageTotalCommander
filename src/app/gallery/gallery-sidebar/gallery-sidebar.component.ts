@@ -53,14 +53,10 @@ export class GallerySidebarComponent {
     this.selectedImageIndexChange.emit(this.selectedImageIndex);
   }
 
-  public assertEventTarget(eventTarget?: EventTarget | null): EventTarget {
+  public onDirectorySelected(eventTarget: EventTarget | null): void {
     if (!eventTarget) {
-      throw new Error("Unexpected event from directory select.");
+      throw new Error("Unexpected null value from directory select.");
     }
-    return eventTarget as EventTarget;
-  }
-
-  public onDirectorySelected(eventTarget: EventTarget): void {
     const fileList = (eventTarget as HTMLInputElement).files as FileList;
     const imagesInSelectedFolder: WebkitFileInterface[] = 
         Array.from(fileList)
