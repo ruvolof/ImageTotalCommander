@@ -18,6 +18,7 @@ import {GallerySliderComponent} from './gallery-slider/gallery-slider.component'
 import {GalleryRoutingModule} from './gallery-routing.module';
 import {GalleryComponent} from './gallery.component';
 import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.component';
+import {DirectivesModule} from '../directives/directives.module';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import {GallerySidebarComponent} from './gallery-sidebar/gallery-sidebar.compone
     MatInputModule,
     MatRadioModule,
     CoreModule,
+    DirectivesModule,
     GalleryRoutingModule,
   ],
 })

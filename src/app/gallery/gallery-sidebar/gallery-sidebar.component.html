@@ -26,13 +26,9 @@
     </button>
   </div>
   <div class="gallery-sidebar-widget">
-    <label class="select-folder-button-label">
-      <input type="file" 
-             webkitdirectory="true"
-             class="hidden-input"
-             (change)="onDirectorySelected($event.target)">
-      Select Folder
-    </label>
+    <input-webkitdirectory [label]="'Select Folder'"
+                           (directorySelected)="onDirectorySelected($event.target)">
+    </input-webkitdirectory>
   </div>
   <div *ngIf="selectedFolderPath"
        class="break-word">
