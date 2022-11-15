@@ -109,5 +109,7 @@
       }
     }
   },
-  "defaultProject": "ImageTotalCommander2"
+  "cli": {
+    "analytics": false
+  }
 }
